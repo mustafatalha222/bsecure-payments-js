@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Page Title</title> 
+    <link rel="stylesheet" href="./bsecure-PaymentPluginStyleSheet.css">
+    <script src="./bsecure-PaymentPlugin.js"></script>
+    <!-- <link rel="stylesheet" href="https://bsecure-dev.s3-eu-west-1.amazonaws.com/stage/bApps/referrals/bAppCss.css">
+    <script src="https://bsecure-dev.s3-eu-west-1.amazonaws.com/stage/bApps/referrals/bAppPlugin.js"></script> -->
+    <style>
+        #bAppContainer{
+            position: relative;
+            display: block;
+            overflow: auto;
+            max-width: 400px;
+            min-height: 80vh;
+            margin-bottom: 20px;
+            border-radius: 20px;
+            background-color: #fff;
+            -o-object-fit: scale-down;
+            object-fit: scale-down;
+        }
+    </style>
+</head>
+<body>
+    <div id="bAppAlertContainer"></div>
+    <div id="bAppContainer"></div>
+
+    <button type="button" onClick="pay()">Pay via bSecure</button>
+</body>
+<script>
+    bSecureApp.initialize({
+        pluginVersion: "ST-0010082",
+        hash: "ST-0010082",
+        merchantId: "ST-0010082",
+        storeId: "ST-0010082",
+        customer: {
+            name: "ST-0010082",
+            email: "ST-0010082",
+            country_code: "ST-0010082",
+            phone_number: "ST-0010082",
+        },
+        order: {
+            orderId: "ST-0010082",
+            currency: "ST-0010082",
+            sub_totalAmount: "ST-0010082",
+            discountAmount: "ST-0010082",
+            totalAmount: "ST-0010082",
+        },
+    })
+</script>
+</html>
