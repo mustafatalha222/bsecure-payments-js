@@ -120,6 +120,7 @@
 <?php endblock() ?>
 
 <?php startblock('headerScripts') ?>
+<!-- <script src="../paymentPlugin.js"></script> -->
 <script src="https://bsecure-dev.s3-eu-west-1.amazonaws.com/dev/bApps/payment-plugin/bsecure-PaymentPlugin.js"></script>
 <?php endblock() ?>
 
@@ -258,23 +259,23 @@
 
 
     const responseListener = () => {
-        bSecurePaymentPluginResponseHanlder.onError = function(data) {
+        bSecurePaymentPluginResponseHandler.onError = function(data) {
             console.log("responseListener : onError: ", data)
             const responseMsg = data.message;
             const responseType = data.type;
-            alertHandler(responseMsg, responseType)
+            alertHandler(responseMsg, "error")
         };
-        bSecurePaymentPluginResponseHanlder.onSucces = function(data) {
-            console.log("responseListener : onSucces: ", data)
+        bSecurePaymentPluginResponseHandler.onSuccess = function(data) {
+            console.log("responseListener : onSuccess: ", data)
             const responseMsg = data.message;
             const responseType = data.type;
-            alertHandler(responseMsg, responseType)
+            alertHandler(responseMsg, "success")
         };
-        bSecurePaymentPluginResponseHanlder.onValidationError = function(data) {
+        bSecurePaymentPluginResponseHandler.onValidationError = function(data) {
             console.log("responseListener : onValidationError: ", data)
             const responseMsg = data.message;
             const responseType = data.type;
-            alertHandler(responseMsg, responseType)
+            alertHandler(responseMsg, "warning")
         };
     };
     
