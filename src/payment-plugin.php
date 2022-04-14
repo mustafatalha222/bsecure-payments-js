@@ -156,11 +156,11 @@
 
 
     function fetchTransactionDetails() {
-        orderId = prompt("Please enter your name", "xtend-001");
-        currency = prompt("Please enter your name", "PKR");
-        subTotalAmount = prompt("Please enter your name", "500");
-        discountAmount = prompt("Please enter your name", "50");
-        totolAmount = prompt("Please enter your name", "450");
+        orderId = prompt("Please enter order id", "xtend-001");
+        currency = prompt("Please enter currency", "PKR");
+        subTotalAmount = prompt("Please enter subtotal amount", "500");
+        discountAmount = prompt("Please enter discount amount", "50");
+        totolAmount = prompt("Please enter total amount", "450");
         customerName = prompt("Please enter your customer's name", "Default User");
         customerCountryCode = prompt("Please enter your customer's country code", "92");
         customerPhoneNumber = prompt("Please enter your customer's phone number", "3452099688");
