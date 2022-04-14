@@ -137,6 +137,51 @@
 <?php startblock('scripts') ?>
 
 <script>
+    let customerName, 
+        customerCountryCode,
+        customerPhoneNumber,
+        customerEmail,
+        customerCountry,
+        customerState,
+        customerCity,
+        customerArea,
+        customerFormattedAddress,
+        orderId,
+        currency,
+        subTotalAmount,
+        discountAmount,
+        totolAmount,
+        merchantId,
+        storeSlug = "";
+
+
+    function fetchTransactionDetails() {
+        orderId = prompt("Please enter your name", "xtend-001");
+        currency = prompt("Please enter your name", "PKR");
+        subTotalAmount = prompt("Please enter your name", "500");
+        discountAmount = prompt("Please enter your name", "50");
+        totolAmount = prompt("Please enter your name", "450");
+        customerName = prompt("Please enter your customer's name", "Default User");
+        customerCountryCode = prompt("Please enter your customer's country code", "92");
+        customerPhoneNumber = prompt("Please enter your customer's phone number", "3452099688");
+        customerEmail = prompt("Please enter your customer's email", "test1@nextgeni.net");
+        customerCountry = prompt("Please enter your customer's country name", "Pakistan");
+        customerState = prompt("Please enter your customer's province name", "Sindh");
+        customerCity = prompt("Please enter your customer's city name", "Karachi");
+        customerArea = prompt("Please enter your customer's area name", "Karachi Township");
+        customerFormattedAddress = prompt("Please enter your customer's formatted address", "Plot B 450, Sector 11-A Sector 11 A North Karachi Twp, Karachi, Karachi City, Sindh, Pakistan");
+        merchantId = prompt("Please enter your merchant id", "1421");
+        storeSlug = prompt("Please enter your store slug", "ST-005722384");
+
+
+        try {
+            responseListener();
+            setTransactionParameters();
+        } catch (error) {
+            console.log("error found in setTransactionParameters", error);
+        }
+    }
+
     function clearAlerts(elem) {
         if (elem) {
             elem.innerHTML = "";
@@ -148,7 +193,6 @@
     }
 
     function alertHandler(message, type) {
-        alert("alert")
         if (checkEmptyHtml(".alert", true)) {
             const elem = document.querySelector(`.alert`);
             clearAlerts(elem);
@@ -177,23 +221,23 @@
     }
 
     const setTransactionParameters = () => {
-        bSecurePaymentTransactionParameters.__00trid__ = "order-xtend-1";
-        bSecurePaymentTransactionParameters.__01curr__ = "PKR";
+        bSecurePaymentTransactionParameters.__00trid__ = orderId;
+        bSecurePaymentTransactionParameters.__01curr__ = currency;
         bSecurePaymentTransactionParameters.__02trdt__ = "6062262";
-        bSecurePaymentTransactionParameters.__03stamt__ = "500";
-        bSecurePaymentTransactionParameters.__04damt__ = "50";
-        bSecurePaymentTransactionParameters.__05tamt__ = "450";
-        bSecurePaymentTransactionParameters.__06cname__ = "sara hasan";
-        bSecurePaymentTransactionParameters.__07ccc__ = "92";
-        bSecurePaymentTransactionParameters.__08cphn__ = "3452099689";
-        bSecurePaymentTransactionParameters.__09cemail__ = "sara.hasan@nexgeni.net";
-        bSecurePaymentTransactionParameters.__10ccc__ = "Pakistan";
-        bSecurePaymentTransactionParameters.__11cstate__ = "Sindh";
-        bSecurePaymentTransactionParameters.__12ccity__ = "karachi";
-        bSecurePaymentTransactionParameters.__13carea__ = "noeth";
-        bSecurePaymentTransactionParameters.__14cfadd__ = "formatted address";
-        bSecurePaymentTransactionParameters.__15mid__ = "1421";
-        bSecurePaymentTransactionParameters.__16stid__ = "ST-005722384";
+        bSecurePaymentTransactionParameters.__03stamt__ = subTotalAmount;
+        bSecurePaymentTransactionParameters.__04damt__ = discountAmount;
+        bSecurePaymentTransactionParameters.__05tamt__ = totolAmount;
+        bSecurePaymentTransactionParameters.__06cname__ = customerName;
+        bSecurePaymentTransactionParameters.__07ccc__ = customerCountryCode;
+        bSecurePaymentTransactionParameters.__08cphn__ = customerPhoneNumber;
+        bSecurePaymentTransactionParameters.__09cemail__ = customerEmail;
+        bSecurePaymentTransactionParameters.__10ccc__ = customerCountry;
+        bSecurePaymentTransactionParameters.__11cstate__ = customerState;
+        bSecurePaymentTransactionParameters.__12ccity__ = customerCity;
+        bSecurePaymentTransactionParameters.__13carea__ = customerArea;
+        bSecurePaymentTransactionParameters.__14cfadd__ = customerFormattedAddress;
+        bSecurePaymentTransactionParameters.__15mid__ = merchantId;
+        bSecurePaymentTransactionParameters.__16stid__ = storeSlug;
         bSecurePaymentTransactionParameters.__17seh__ = "sfasfafasfasf";
         bSecurePaymentTransactionParameters.__18ver__ = "0.0";
         try {
@@ -234,11 +278,14 @@
         };
     };
     
-    try {
-        responseListener();
-        setTransactionParameters();
-    } catch (error) {
-        console.log("error found in setTransactionParameters", error);
-    }
+    // try {
+    //     responseListener();
+    //     setTransactionParameters();
+    // } catch (error) {
+    //     console.log("error found in setTransactionParameters", error);
+    // }
+
+
+    fetchTransactionDetails();
 </script>
 <?php endblock() ?>
