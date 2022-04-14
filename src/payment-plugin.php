@@ -137,9 +137,46 @@
 <?php startblock('scripts') ?>
 
 <script>
-    
+    function clearAlerts(elem) {
+        if (elem) {
+            elem.innerHTML = "";
+        }
+        const parentContainer = document.getElementById("alertContainer");
+        if (parentContainer.classList.contains("show")) {
+            parentContainer.classList.remove("show");
+        }
+    }
+
+    function alertHandler(message, type) {
+        alert("alert")
+        if (checkEmptyHtml(".alert", true)) {
+            const elem = document.querySelector(`.alert`);
+            clearAlerts(elem);
+        };
+
+        const parentContainer = document.getElementById("alertContainer");
+
+        const childContainer = document.createElement("div");
+        childContainer.className = "alert";
+
+        const alertContainer = '<div class="alert-' + type + '">' +
+            message +
+            '</div>';
+        childContainer.innerHTML = alertContainer;
+
+        // append theKid to the end of theParent
+        parentContainer.classList.add("show");
+        setTimeout(function() {
+            clearAlerts(parentContainer);
+        }, 5000);
+        // append theKid to the end of theParent
+        parentContainer.appendChild(childContainer);
+
+        // prepend theKid to the beginning of theParent
+        parentContainer.insertBefore(childContainer, parentContainer.firstChild);
+    }
+
     const setTransactionParameters = () => {
-        /*eslint-disable */
         bSecurePaymentTransactionParameters.__00trid__ = "order-xtend-1";
         bSecurePaymentTransactionParameters.__01curr__ = "PKR";
         bSecurePaymentTransactionParameters.__02trdt__ = "6062262";
@@ -155,12 +192,10 @@
         bSecurePaymentTransactionParameters.__12ccity__ = "karachi";
         bSecurePaymentTransactionParameters.__13carea__ = "noeth";
         bSecurePaymentTransactionParameters.__14cfadd__ = "formatted address";
-        bSecurePaymentTransactionParameters.__15mid__ = 1421;
+        bSecurePaymentTransactionParameters.__15mid__ = "1421";
         bSecurePaymentTransactionParameters.__16stid__ = "ST-005722384";
         bSecurePaymentTransactionParameters.__17seh__ = "sfasfafasfasf";
         bSecurePaymentTransactionParameters.__18ver__ = "0.0";
-
-        /*eslint-enable */
         try {
             initializeEventListener();
         } catch (error) {
@@ -171,84 +206,36 @@
     const initializeEventListener = () => {
         try {
             document.head.insertAdjacentHTML("beforeend", `<style id="antiClickjack" type="text/css"></style>`);
-            /*eslint-disable */
             bSecureApp.initialize("bSecurePaymentPluginContainer");
-            /*eslint-enable */
-            // responseListener();
         } catch (error) {
             console.log("error found in initialize", error);
         }
     };
 
 
-    // const responseListener = () => {
-    //     /*eslint-disable */
-    //     //Success Code Mappings
-    //     PGWHPCSuccessMap.onValidSecurityCode = function(msg) {
-    //         // setSuccessMessages(msg);
-    //     };
-    //     PGWHPCSuccessMap.onValidMasterCard = function(msg) {
-    //         // setSuccessMessages(msg);
-    //     };
-    //     PGWHPCSuccessMap.onValidSessionResponse = function(msg) {
-    //         // setSuccessMessages(msg);
-    //     };
-    //     PGWHPCSuccessMap.onPurchaseProcessedViaCard = function(msg) {
-    //         processTransactionResponse(msg, CONSTANTS.NIFT_RESPONSE_HANDLER.API);
-    //     };
-    //     PGWHPCSuccessMap.onPurchaseProcessedViaAccount = function(msg) {
-    //         processTransactionResponse(msg, CONSTANTS.NIFT_RESPONSE_HANDLER.API);
-    //     };
-
-    //     // 7. Error Code Mappings
-    //     //Error Code Mappings
-    //     PGWHPCErrorMap.onInvalidTransactionDetails = function(msg) {
-    //         setErrors(msg);
-    //     };
-    //     PGWHPCErrorMap.onInvalidContainerArea = function(msg) {
-    //         setErrors(msg);
-    //     };
-    //     PGWHPCErrorMap.onInvalidCardNumber = function(msg) {
-    //         setErrors(msg);
-    //     };
-    //     PGWHPCErrorMap.onInvalidExpiryYear = function(msg) {
-    //         setErrors(msg);
-    //     };
-    //     PGWHPCErrorMap.onInvalidExpiryMonth = function(msg) {
-    //         setErrors(msg);
-    //     };
-    //     PGWHPCErrorMap.onInvalidSecurityCode = function(msg) {
-    //         setErrors(msg);
-    //     };
-    //     PGWHPCErrorMap.onInvalidCNIC = function(msg) {
-    //         updateNIFTErrorResponse(msg, CONSTANTS.NIFT_RESPONSE_HANDLER.UI);
-    //     };
-    //     PGWHPCErrorMap.onInvalidContact = function(msg) {
-    //         updateNIFTErrorResponse(msg, CONSTANTS.NIFT_RESPONSE_HANDLER.UI);
-    //     };
-    //     PGWHPCErrorMap.onInvalidBank = function(msg) {
-    //         updateNIFTErrorResponse(msg, CONSTANTS.NIFT_RESPONSE_HANDLER.UI);
-    //     };
-    //     PGWHPCErrorMap.onInvalidAccount = function(msg) {
-    //         updateNIFTErrorResponse(msg, CONSTANTS.NIFT_RESPONSE_HANDLER.UI);
-    //     };
-    //     PGWHPCErrorMap.onInvalidOTP = function(msg) {
-    //         updateNIFTErrorResponse(msg, CONSTANTS.NIFT_RESPONSE_HANDLER.UI);
-    //     };
-    //     PGWHPCErrorMap.onRequestTimedOut = function(msg) {
-    //         updateNIFTErrorResponse(msg, CONSTANTS.NIFT_RESPONSE_HANDLER.API);
-    //     };
-    //     PGWHPCErrorMap.onSystemError = function(msg) {
-    //         updateNIFTErrorResponse(msg, CONSTANTS.NIFT_RESPONSE_HANDLER.API);
-    //     };
-    //     PGWHPCErrorMap.onGenericError = function(msg) {
-    //         updateNIFTErrorResponse(msg, CONSTANTS.NIFT_RESPONSE_HANDLER.API);
-    //     };
-    //     /*eslint-enable */
-    //     // this.enableProcessButton();
-    // };
-
+    const responseListener = () => {
+        bSecurePaymentPluginResponseHanlder.onError = function(data) {
+            console.log("responseListener : onError: ", data)
+            const responseMsg = data.message;
+            const responseType = data.type;
+            alertHandler(responseMsg, responseType)
+        };
+        bSecurePaymentPluginResponseHanlder.onSucces = function(data) {
+            console.log("responseListener : onSucces: ", data)
+            const responseMsg = data.message;
+            const responseType = data.type;
+            alertHandler(responseMsg, responseType)
+        };
+        bSecurePaymentPluginResponseHanlder.onValidationError = function(data) {
+            console.log("responseListener : onValidationError: ", data)
+            const responseMsg = data.message;
+            const responseType = data.type;
+            alertHandler(responseMsg, responseType)
+        };
+    };
+    
     try {
+        responseListener();
         setTransactionParameters();
     } catch (error) {
         console.log("error found in setTransactionParameters", error);
