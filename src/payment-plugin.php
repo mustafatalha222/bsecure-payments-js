@@ -282,18 +282,11 @@
         };
         bSecurePaymentPluginResponseHandler.onProcessPayment = function(data) {
             alert('Payment Processed')
+            document.location.href='checkout'
             console.log(data);
         };
     };
     
-    // try {
-    //     responseListener();
-    //     setTransactionParameters();
-    // } catch (error) {
-    //     console.log("error found in setTransactionParameters", error);
-    // }
-
-
     fetchTransactionDetails();
 </script>
 <?php endblock() ?>
