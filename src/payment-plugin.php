@@ -280,6 +280,10 @@
             const responseType = data.type;
             alertHandler(responseMsg, "warning")
         };
+        bSecurePaymentPluginResponseHandler.onProcessPayment = function(data) {
+            alert('Payment Processed')
+            console.log(data);
+        };
     };
     
     // try {

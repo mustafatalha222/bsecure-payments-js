@@ -69,6 +69,9 @@ const bSecurePaymentPluginResponseHandler = {
     onValidationError: function (data) {
         return data;
     },
+    onProcessPayment: function (data) {
+        return data;
+    },
     onHandleValidation: function (data) {
         return bSecurePaymentPluginResponseHandler.onValidationError(JSON.parse(data));
     },
@@ -95,6 +98,9 @@ const bSecurePaymentPluginResponseHandler = {
             bSecurePaymentPluginResponseHandler.onError(data);
         }
     },
+    handlePayments: function (data) {
+       bSecurePaymentPluginResponseHandler.onProcessPayment(data);
+    }
 }
 
 
@@ -251,6 +257,9 @@ const bSecureApp = {
             const source = data?.source;
             if (source === "embeddableShakehand") {
                 bSecurePaymentPluginResponseHandler.handleErrors(data?.data)
+            }
+            if (source === "embeddableShakehandSuccess") {
+                bSecurePaymentPluginResponseHandler.handlePayments(data?.data)
             }
         });
         return true
