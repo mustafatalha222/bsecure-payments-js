@@ -11,6 +11,7 @@
 </head>
 
 <body>
+    <div id="payment_response"></div>
     <?php startblock('body') ?>
     <?php endblock() ?>
 </body>

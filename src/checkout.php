@@ -20,4 +20,14 @@
 
 <?php startblock('body') ?>
 <button type="button" onClick="document.location.href='payment-plugin'" class="btn-primary">Pay via bSecure</button>
+<div id="paymentResult"></div>
+<?php endblock() ?>
+
+
+<?php startblock('scripts') ?>
+<script>
+    if(localStorage.getItem("payment_response")){
+        document.getElementById('payment_response').innerHTML = localStorage.getItem("payment_response");
+    }
+</script>
 <?php endblock() ?>

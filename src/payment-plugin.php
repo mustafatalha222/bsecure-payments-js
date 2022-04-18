@@ -120,8 +120,8 @@
 <?php endblock() ?>
 
 <?php startblock('headerScripts') ?>
-<!-- <script src="../paymentPlugin.js"></script> -->
-<script src="https://bsecure-dev.s3-eu-west-1.amazonaws.com/dev/bApps/payment-plugin/bsecure-PaymentPlugin.js"></script>
+<script src="../paymentPlugin.js"></script>
+<!-- <script src="https://bsecure-dev.s3-eu-west-1.amazonaws.com/dev/bApps/payment-plugin/bsecure-PaymentPlugin.js"></script> -->
 <?php endblock() ?>
 
 
@@ -282,8 +282,9 @@
         };
         bSecurePaymentPluginResponseHandler.onProcessPayment = function(data) {
             alert('Payment Processed')
-            document.location.href='checkout'
+            localStorage.setItem("payment_response", JSON.stringify(data));
             console.log(data);
+            document.location.href='/'
         };
     };
     
