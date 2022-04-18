@@ -54,6 +54,7 @@ const bSecurePaymentTransactionParameters = {
     __17seh__: "1.1", //
     __18ver__: "", // 				pp_Version
     __19lan__: "EN", //             pp_Language
+    __20red__: "", //             pp_RedirectURL
 }
 
 
@@ -119,6 +120,7 @@ function generateOrder() { //Create Token
     xhttp.open("POST", _url, true);
     xhttp.setRequestHeader("Content-Type", "application/json");
     xhttp.send(JSON.stringify({
+        "redirect_url": bSecurePaymentTransactionParameters.__20red__,
         "plugin_version": bSecurePaymentTransactionParameters.__18ver__,
         "hash": bSecurePaymentTransactionParameters.__17seh__,
         "merchant_id": bSecurePaymentTransactionParameters.__15mid__,
@@ -236,6 +238,9 @@ const bSecureApp = {
             return false;
         } else if (isEmpty(bSecurePaymentTransactionParameters.__18ver__)) {
             bSecurePaymentPluginResponseHandler.formatValidationError("pp_Version is required.");
+            return false;
+        } else if (isEmpty(bSecurePaymentTransactionParameters.__20red__)) {
+            bSecurePaymentPluginResponseHandler.formatValidationError("pp_RedirectURL is required.");
             return false;
         }
         /*

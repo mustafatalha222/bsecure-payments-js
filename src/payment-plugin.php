@@ -141,6 +141,7 @@
     let customerName, 
         customerCountryCode,
         customerPhoneNumber,
+        redirect_url,
         customerEmail,
         customerCountry,
         customerState,
@@ -159,6 +160,7 @@
     function fetchTransactionDetails() {
         orderId = prompt("Please enter order id", "xtend-001");
         currency = prompt("Please enter currency", "PKR");
+        redirect_url = prompt("Please enter redirect url", window.location);
         subTotalAmount = prompt("Please enter subtotal amount", "500");
         discountAmount = prompt("Please enter discount amount", "50");
         totolAmount = prompt("Please enter total amount", "450");
@@ -241,6 +243,7 @@
         bSecurePaymentTransactionParameters.__16stid__ = storeSlug;
         bSecurePaymentTransactionParameters.__17seh__ = "sfasfafasfasf";
         bSecurePaymentTransactionParameters.__18ver__ = "0.0";
+        bSecurePaymentTransactionParameters.__20red__ = redirect_url;
         try {
             initializeEventListener();
         } catch (error) {
