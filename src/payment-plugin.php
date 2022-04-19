@@ -262,26 +262,32 @@
 
 
     const responseListener = () => {
-        bSecurePaymentPluginResponseHandler.onError = function(data) {
-            console.log("responseListener : onError: ", data)
+        bSecurePaymentPluginResponseHandler.onErrorAlert = function(data) {
+            console.log("responseListener : onErrorAlert: ", data)
             const responseMsg = data.message;
             const responseType = data.type;
             alertHandler(responseMsg, "error")
         };
-        bSecurePaymentPluginResponseHandler.onSuccess = function(data) {
-            console.log("responseListener : onSuccess: ", data)
+        bSecurePaymentPluginResponseHandler.onSuccessAlert = function(data) {
+            console.log("responseListener : onSuccessAlert: ", data)
             const responseMsg = data.message;
             const responseType = data.type;
             alertHandler(responseMsg, "success")
         };
-        bSecurePaymentPluginResponseHandler.onValidationError = function(data) {
-            console.log("responseListener : onValidationError: ", data)
+        bSecurePaymentPluginResponseHandler.onValidationErrorAlert = function(data) {
+            console.log("responseListener : onValidationErrorAlert: ", data)
             const responseMsg = data.message;
             const responseType = data.type;
             alertHandler(responseMsg, "warning")
         };
-        bSecurePaymentPluginResponseHandler.onProcessPayment = function(data) {
-            alert('Payment Processed')
+        bSecurePaymentPluginResponseHandler.onProcessPaymentFailure = function(data) {
+            alert('Payment Processed Failure')
+            localStorage.setItem("payment_response", JSON.stringify(data));
+            console.log(data);
+            document.location.href='/'
+        };
+        bSecurePaymentPluginResponseHandler.onProcessPaymentSuccess = function(data) {
+            alert('Payment Process Success')
             localStorage.setItem("payment_response", JSON.stringify(data));
             console.log(data);
             document.location.href='/'

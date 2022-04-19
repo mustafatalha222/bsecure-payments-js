@@ -60,20 +60,23 @@ const bSecurePaymentTransactionParameters = {
 
 //Error Code Mappings
 const bSecurePaymentPluginResponseHandler = {
-    onError: function (data) {
+    onErrorAlert: function (data) {
         return data;
     },
-    onSuccess: function (data) {
+    onSuccessAlert: function (data) {
         return data;
     },
-    onValidationError: function (data) {
+    onValidationErrorAlert: function (data) {
         return data;
     },
-    onProcessPayment: function (data) {
+    onProcessPaymentSuccess: function (data) {
+        return data;
+    },
+    onProcessPaymentFailure: function (data) {
         return data;
     },
     onHandleValidation: function (data) {
-        return bSecurePaymentPluginResponseHandler.onValidationError(JSON.parse(data));
+        return bSecurePaymentPluginResponseHandler.onValidationErrorAlert(JSON.parse(data));
     },
     formatValidationError: function (data) {
         let format = { status: 422, message: data, body: {}, exception: {} };
@@ -83,7 +86,6 @@ const bSecurePaymentPluginResponseHandler = {
         throw new Error(msg)
     },
     handleErrors: function (data) {
-        console.log("data: ", data)
         const responseCode = (data.status).toString();
         const responseException = data.exception;
         if (!isEmpty(responseException)) {
@@ -91,15 +93,21 @@ const bSecurePaymentPluginResponseHandler = {
         }
 
         if (responseCode.startsWith(2)) {
-            bSecurePaymentPluginResponseHandler.onSuccess(data);
+            bSecurePaymentPluginResponseHandler.onSuccessAlert(data);
         } else if (responseCode === "422") {
-            bSecurePaymentPluginResponseHandler.onValidationError(data);
+            bSecurePaymentPluginResponseHandler.onValidationErrorAlert(data);
         }  else {
-            bSecurePaymentPluginResponseHandler.onError(data);
+            bSecurePaymentPluginResponseHandler.onErrorAlert(data);
         }
     },
     handlePayments: function (data) {
-       bSecurePaymentPluginResponseHandler.onProcessPayment(data);
+        const responseCode = (data.status).toString();
+
+        if (responseCode.startsWith(2)) {
+            bSecurePaymentPluginResponseHandler.onProcessPaymentSuccess(data);
+        } else {
+            bSecurePaymentPluginResponseHandler.onProcessPaymentFailure(data);
+        }
     }
 }
 
@@ -247,6 +255,9 @@ const bSecureApp = {
             return false;
         } else if (isEmpty(bSecurePaymentTransactionParameters.__20red__)) {
             bSecurePaymentPluginResponseHandler.formatValidationError("pp_RedirectURL is required.");
+            return false;
+        } else if(!navigator.cookieEnabled) {
+            bSecurePaymentPluginResponseHandler.formatValidationError("Please Allow All Cookies from your browser settings.");
             return false;
         }
         /*
