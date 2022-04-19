@@ -173,8 +173,8 @@
         customerCity = prompt("Please enter your customer's city name", "Karachi");
         customerArea = prompt("Please enter your customer's area name", "Karachi Township");
         customerFormattedAddress = prompt("Please enter your customer's formatted address", "Plot B 450, Sector 11-A Sector 11 A North Karachi Twp, Karachi, Karachi City, Sindh, Pakistan");
-        merchantId = prompt("Please enter your merchant id", "1421");
-        storeSlug = prompt("Please enter your store slug", "ST-005722384");
+        merchantId = prompt("Please enter your merchant id", "2044");
+        storeSlug = prompt("Please enter your store slug", "ST-001742404");
 
 
         try {
