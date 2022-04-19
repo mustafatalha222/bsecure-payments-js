@@ -26,8 +26,8 @@
 
 <?php startblock('scripts') ?>
 <script>
-    if(localStorage.getItem("payment_response")){
-        document.getElementById('payment_response').innerHTML = localStorage.getItem("payment_response");
+    if(sessionStorage.getItem("payment_response")){
+        document.getElementById('payment_response').innerHTML = sessionStorage.getItem("payment_response");
     }
 </script>
 <?php endblock() ?>

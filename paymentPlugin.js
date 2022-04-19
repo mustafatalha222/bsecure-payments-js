@@ -1,7 +1,5 @@
 const referrer = location.host;
-const bSecurePaymentTransactionURL = "https://api-dev.bsecure.app/";
-const bSecurePaymentCreateOrderEndpoint = "v1/payment-plugin/create-order";
-const bSecurePaymentIframeURL = "https://bsecure-payment-plugin.herokuapp.com/"
+const bSecurePaymentTransactionURL = "https://api-dev.bsecure.app/v1/payment-plugin/create-order";
 
 function isEmpty(x) {
     return (
@@ -96,13 +94,12 @@ const bSecurePaymentPluginResponseHandler = {
             bSecurePaymentPluginResponseHandler.onSuccessAlert(data);
         } else if (responseCode === "422") {
             bSecurePaymentPluginResponseHandler.onValidationErrorAlert(data);
-        }  else {
+        }  else if(!isEmpty(responseCode)) {
             bSecurePaymentPluginResponseHandler.onErrorAlert(data);
         }
     },
     handlePayments: function (data) {
         const responseCode = (data.status).toString();
-
         if (responseCode.startsWith(2)) {
             bSecurePaymentPluginResponseHandler.onProcessPaymentSuccess(data);
         } else {
@@ -114,14 +111,13 @@ const bSecurePaymentPluginResponseHandler = {
 
 function generateOrder() { //Create Token
     var xhttp = new XMLHttpRequest();
-    var _url = bSecurePaymentTransactionURL + bSecurePaymentCreateOrderEndpoint;
     xhttp.onreadystatechange = function () {
         var _data = this;
         if (this.readyState == 4) {
             var _responseObj = JSON.parse(_data.response);
             if (!isEmpty(_responseObj.body) && this.status == 200) {
                 if (!isEmpty(_responseObj.body.order_reference)) {
-                    bSecureApp.prepareFrame(_responseObj.body.order_reference);
+                    bSecureApp.prepareFrame(_responseObj.body);
                 } else {
                     bSecurePaymentPluginResponseHandler.handleErrors(_responseObj);
                 }
@@ -131,7 +127,7 @@ function generateOrder() { //Create Token
         }
     };
 
-    xhttp.open("POST", _url, true);
+    xhttp.open("POST", bSecurePaymentTransactionURL, true);
     xhttp.setRequestHeader("Content-Type", "application/json");
     xhttp.send(JSON.stringify({
         "redirect_url": bSecurePaymentTransactionParameters.__20red__,
@@ -179,10 +175,11 @@ const bSecureApp = {
     },
 
 
-    prepareFrame: function (order_reference) {
+    prepareFrame: function (body) {
+        const { checkout_url} = body
         const ifrm = document.createElement("iframe");
-        let url = new URL(bSecurePaymentIframeURL);
-        url.searchParams.append('order_ref', JSON.stringify(order_reference));
+        let url = new URL(checkout_url);
+        // url.searchParams.append('order_ref', JSON.stringify(order_reference));
 
         ifrm.setAttribute("src", url.href);
         ifrm.setAttribute("id", 'bSecurePaymentPluginEmbeddedIframe');

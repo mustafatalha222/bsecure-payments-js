@@ -120,17 +120,14 @@
 <?php endblock() ?>
 
 <?php startblock('headerScripts') ?>
-<!-- <script src="../paymentPlugin.js"></script> -->
-<script src="https://bsecure-dev.s3-eu-west-1.amazonaws.com/dev/bApps/payment-plugin/bsecure-PaymentPlugin.js"></script> 
+<script src="../paymentPlugin.js"></script>
+<!-- <script src="https://bsecure-dev.s3-eu-west-1.amazonaws.com/dev/bApps/payment-plugin/bsecure-PaymentPlugin.js"></script>  -->
 <?php endblock() ?>
 
 
 
 <?php startblock('body') ?>
 <div id="alertContainer">
-    <div class="alert">
-
-    </div>
 </div>
 <div id="bSecurePaymentPluginContainer"></div>
 <?php endblock() ?>
@@ -266,7 +263,7 @@
             console.log("responseListener : onErrorAlert: ", data)
             const responseMsg = data.message;
             const responseType = data.type;
-            alertHandler(responseMsg, "error")
+            alertHandler(responseMsg, "danger")
         };
         bSecurePaymentPluginResponseHandler.onSuccessAlert = function(data) {
             console.log("responseListener : onSuccessAlert: ", data)
@@ -282,15 +279,15 @@
         };
         bSecurePaymentPluginResponseHandler.onProcessPaymentFailure = function(data) {
             alert('Payment Processed Failure')
-            localStorage.setItem("payment_response", JSON.stringify(data));
+            sessionStorage.setItem("payment_response", JSON.stringify(data));
             console.log(data);
-            document.location.href='/'
+            window.location.href='/'
         };
         bSecurePaymentPluginResponseHandler.onProcessPaymentSuccess = function(data) {
             alert('Payment Process Success')
-            localStorage.setItem("payment_response", JSON.stringify(data));
+            sessionStorage.setItem("payment_response", JSON.stringify(data));
             console.log(data);
-            document.location.href='/'
+            window.location.href='/'
         };
     };
     
