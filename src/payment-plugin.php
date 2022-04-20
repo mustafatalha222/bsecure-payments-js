@@ -155,6 +155,7 @@
 
 
     function fetchTransactionDetails() {
+        sessionStorage.clear();
         orderId = prompt("Please enter order id", "xtend-001");
         currency = prompt("Please enter currency", "PKR");
         redirect_url = prompt("Please enter redirect url", window.location);
