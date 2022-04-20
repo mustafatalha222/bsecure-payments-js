@@ -121,7 +121,7 @@
 
 <?php startblock('headerScripts') ?>
 <!-- <script src="../paymentPlugin.js"></script> -->
-<script src="https://bsecure-dev.s3-eu-west-1.amazonaws.com/dev/bApps/payment-plugin/bsecure-PaymentPlugin.js"></script> 
+<script src="<?php echo $_ENV['PLUGIN_SCRIPT'] ?>"></script> 
 <?php endblock() ?>
 
 
