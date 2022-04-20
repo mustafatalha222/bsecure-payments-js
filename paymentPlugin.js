@@ -1,4 +1,3 @@
-const referrer = location.host;
 const bSecurePaymentTransactionURL = "https://api-dev.bsecure.app/v1/payment-plugin/create-order";
 
 function isEmpty(x) {
@@ -156,7 +155,7 @@ const bSecureApp = {
             "merchant_id": bSecurePaymentTransactionParameters.__15mid__,
             "store_id": bSecurePaymentTransactionParameters.__16stid__,
             "txn_reference": bSecurePaymentTransactionParameters.__02trdt__,
-            "env_id": bSecurePaymentTransactionParameters.__21cenv__,
+            "env_id": parseInt(bSecurePaymentTransactionParameters.__21cenv__),
             "customer": {
                 "name": bSecurePaymentTransactionParameters.__06cname__,
                 "email": bSecurePaymentTransactionParameters.__09cemail__,
