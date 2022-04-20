@@ -12,7 +12,7 @@ function isEmpty(x) {
         x.length === 0 ||
         (x === "object" && Object.key(x).length === 0) ||
         x === "" ||
-        (x // 👈 null and undefined check
+        (x // ðŸ‘ˆ null and undefined check
             && Object.keys(x).length === 0
             && Object.getPrototypeOf(x) === Object.prototype)
     );
@@ -99,9 +99,11 @@ const bSecurePaymentPluginResponseHandler = {
         }
     },
     handlePayments: function (data) {
+        console.log(data);
         const responseCode = (data.status).toString();
         if (responseCode.startsWith(2)) {
             bSecurePaymentPluginResponseHandler.onProcessPaymentSuccess(data);
+            bSecureApp.resetFrame();
         } else {
             bSecurePaymentPluginResponseHandler.onProcessPaymentFailure(data);
         }
@@ -109,54 +111,6 @@ const bSecurePaymentPluginResponseHandler = {
 }
 
 
-function generateOrder() { //Create Token
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function () {
-        var _data = this;
-        if (this.readyState == 4) {
-            var _responseObj = JSON.parse(_data.response);
-            if (!isEmpty(_responseObj.body) && this.status == 200) {
-                if (!isEmpty(_responseObj.body.order_reference)) {
-                    bSecureApp.prepareFrame(_responseObj.body);
-                } else {
-                    bSecurePaymentPluginResponseHandler.handleErrors(_responseObj);
-                }
-            } else {
-                bSecurePaymentPluginResponseHandler.handleErrors(_responseObj);
-            }
-        }
-    };
-
-    xhttp.open("POST", bSecurePaymentTransactionURL, true);
-    xhttp.setRequestHeader("Content-Type", "application/json");
-    xhttp.send(JSON.stringify({
-        "redirect_url": bSecurePaymentTransactionParameters.__20red__,
-        "plugin_version": bSecurePaymentTransactionParameters.__18ver__,
-        "hash": bSecurePaymentTransactionParameters.__17seh__,
-        "merchant_id": bSecurePaymentTransactionParameters.__15mid__,
-        "store_id": bSecurePaymentTransactionParameters.__16stid__,
-        "customer": {
-            "name": bSecurePaymentTransactionParameters.__06cname__,
-            "email": bSecurePaymentTransactionParameters.__09cemail__,
-            "country_code": bSecurePaymentTransactionParameters.__07ccc__,
-            "phone_number": bSecurePaymentTransactionParameters.__08cphn__
-        },
-        "customer_address": {
-            "country": bSecurePaymentTransactionParameters.__10ccc__,
-            "province": bSecurePaymentTransactionParameters.__11cstate__,
-            "city": bSecurePaymentTransactionParameters.__12ccity__,
-            "area": bSecurePaymentTransactionParameters.__13carea__,
-            "address": bSecurePaymentTransactionParameters.__14cfadd__
-        },
-        "order": {
-            "order_id": bSecurePaymentTransactionParameters.__00trid__,
-            "currency": bSecurePaymentTransactionParameters.__01curr__,
-            "sub_total_amount": bSecurePaymentTransactionParameters.__03stamt__,
-            "discount_amount": bSecurePaymentTransactionParameters.__04damt__,
-            "total_amount": bSecurePaymentTransactionParameters.__05tamt__
-        }
-    }));
-}
 
 const bSecureApp = {
     initialize: function (objectId) {
@@ -168,13 +122,59 @@ const bSecureApp = {
             } else {
                 const iframeListenerPrepared = bSecureApp.prepareFrameListener();
                 if (iframeListenerPrepared) {
-                    generateOrder();
+                    bSecureApp.generateOrder();
                 }
             }
         }
     },
-
-
+    generateOrder: function () { //Create Token
+        const xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            var _data = this;
+            if (this.readyState == 4) {
+                var _responseObj = JSON.parse(_data.response);
+                if (!isEmpty(_responseObj.body) && this.status == 200) {
+                    if (!isEmpty(_responseObj.body.order_reference)) {
+                        bSecureApp.prepareFrame(_responseObj.body);
+                    } else {
+                        bSecurePaymentPluginResponseHandler.handleErrors(_responseObj);
+                    }
+                } else {
+                    bSecurePaymentPluginResponseHandler.handleErrors(_responseObj);
+                }
+            }
+        };
+    
+        xhttp.open("POST", bSecurePaymentTransactionURL, true);
+        xhttp.setRequestHeader("Content-Type", "application/json");
+        xhttp.send(JSON.stringify({
+            "redirect_url": bSecurePaymentTransactionParameters.__20red__,
+            "plugin_version": bSecurePaymentTransactionParameters.__18ver__,
+            "hash": bSecurePaymentTransactionParameters.__17seh__,
+            "merchant_id": bSecurePaymentTransactionParameters.__15mid__,
+            "store_id": bSecurePaymentTransactionParameters.__16stid__,
+            "customer": {
+                "name": bSecurePaymentTransactionParameters.__06cname__,
+                "email": bSecurePaymentTransactionParameters.__09cemail__,
+                "country_code": bSecurePaymentTransactionParameters.__07ccc__,
+                "phone_number": bSecurePaymentTransactionParameters.__08cphn__
+            },
+            "customer_address": {
+                "country": bSecurePaymentTransactionParameters.__10ccc__,
+                "province": bSecurePaymentTransactionParameters.__11cstate__,
+                "city": bSecurePaymentTransactionParameters.__12ccity__,
+                "area": bSecurePaymentTransactionParameters.__13carea__,
+                "address": bSecurePaymentTransactionParameters.__14cfadd__
+            },
+            "order": {
+                "order_id": bSecurePaymentTransactionParameters.__00trid__,
+                "currency": bSecurePaymentTransactionParameters.__01curr__,
+                "sub_total_amount": bSecurePaymentTransactionParameters.__03stamt__,
+                "discount_amount": bSecurePaymentTransactionParameters.__04damt__,
+                "total_amount": bSecurePaymentTransactionParameters.__05tamt__
+            }
+        }));
+    },
     prepareFrame: function (body) {
         const { checkout_url} = body
         const ifrm = document.createElement("iframe");
@@ -191,6 +191,9 @@ const bSecureApp = {
         ifrm.style.width = "100%";
         ifrm.style.height = "100%";
         document.getElementById("bSecurePaymentPluginContainer").appendChild(ifrm);
+    },
+    resetFrame: function () {
+        document.getElementById("bSecurePaymentPluginContainer").remove();
     },
     prepareFrameListener: function () {
         /*
