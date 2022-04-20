@@ -20,20 +20,19 @@
         '__15mid__' => $_ENV['MERCHANT_ID'],
         '__16stid__' => $_ENV['STORE_ID'],
         '__18ver__' => $_ENV['PLUGIN_VERSION'],
-        '__20red__' => $_SERVER['SERVER_NAME']
+        '__20red__' => $_SERVER['SERVER_NAME'],
+        '__21cenv__' => $_ENV['CLIENT_ENV'],
     ];
-
-    $salt = $_ENV['CLIENT_ID'].'|'.$_ENV['CLIENT_SECRET'].':'.$_ENV['CLIENT_ENV'];
+    $salt = $_ENV['CLIENT_ID'];
     ksort($details);
     $signature = $salt."&";
     foreach($details as $key => $value)
     {
-        $signature .= $value;
+        $signature .= preg_replace("/\s+/", "", $value);
         if(next($details)) {
             $signature .= "&";
         }
     }
-
     $setSignature = hash_hmac('sha256', $signature, $salt);
     $details['__17seh__'] = strtoupper($setSignature);
 ?>
@@ -160,8 +159,8 @@
 <?php endblock() ?>
 
 <?php startblock('headerScripts') ?>
-<!-- <script src="../paymentPlugin.js"></script> -->
-<script src="<?php echo $_ENV['PLUGIN_SCRIPT'] ?>"></script> 
+<script src="../paymentPlugin.js"></script>
+<!-- <script src="<?php echo $_ENV['PLUGIN_SCRIPT'] ?>"></script>  -->
 <?php endblock() ?>
 
 
@@ -238,6 +237,7 @@
         bSecurePaymentTransactionParameters.__17seh__ = details.__17seh__;
         bSecurePaymentTransactionParameters.__18ver__ = details.__18ver__;
         bSecurePaymentTransactionParameters.__20red__ = details.__20red__;
+        bSecurePaymentTransactionParameters.__21cenv__ = details.__21cenv__;
         
         try {
             document.head.insertAdjacentHTML("beforeend", `<style id="antiClickjack" type="text/css"></style>`);

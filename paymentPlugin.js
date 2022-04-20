@@ -33,7 +33,7 @@ function checkEmptyHtml(id, checkChildNode = false) {
 //Transaction Parameters
 const bSecurePaymentTransactionParameters = {
     __00trid__: "", //              pp_OrderId
-    __01curr__: "PKR", //			      pp_TxnCurrency
+    __01curr__: "PKR", //			pp_TxnCurrency
     __02trdt__: "", //              pp_TxnDateTime
     __03stamt__: "", //             pp_TxnSubTotal
     __04damt__: "", //              pp_TxnDiscount
@@ -52,7 +52,8 @@ const bSecurePaymentTransactionParameters = {
     __17seh__: "1.1", //
     __18ver__: "", // 				pp_Version
     __19lan__: "EN", //             pp_Language
-    __20red__: "", //             pp_RedirectURL
+    __20red__: "", //               pp_RedirectURL
+    __21cenv__: ""//                pp_Environment
 }
 
 
@@ -154,6 +155,8 @@ const bSecureApp = {
             "hash": bSecurePaymentTransactionParameters.__17seh__,
             "merchant_id": bSecurePaymentTransactionParameters.__15mid__,
             "store_id": bSecurePaymentTransactionParameters.__16stid__,
+            "txn_reference": bSecurePaymentTransactionParameters.__02trdt__,
+            "env_id": bSecurePaymentTransactionParameters.__21cenv__,
             "customer": {
                 "name": bSecurePaymentTransactionParameters.__06cname__,
                 "email": bSecurePaymentTransactionParameters.__09cemail__,
@@ -255,6 +258,9 @@ const bSecureApp = {
             bSecurePaymentPluginResponseHandler.formatValidationError("pp_Version is required.");
             return false;
         } else if (isEmpty(bSecurePaymentTransactionParameters.__20red__)) {
+            bSecurePaymentPluginResponseHandler.formatValidationError("pp_RedirectURL is required.");
+            return false;
+        }  else if (isEmpty(bSecurePaymentTransactionParameters.__21cenv__)) {
             bSecurePaymentPluginResponseHandler.formatValidationError("pp_RedirectURL is required.");
             return false;
         } else if(!navigator.cookieEnabled) {
