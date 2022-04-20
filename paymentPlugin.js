@@ -127,12 +127,13 @@ const bSecureApp = {
             }
         }
     },
-    generateOrder: function () { //Create Token
+    generateOrder: function () {
         const xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function () {
             var _data = this;
             if (this.readyState == 4) {
                 var _responseObj = JSON.parse(_data.response);
+                console.log("_responseObj: ", _responseObj)
                 if (!isEmpty(_responseObj.body) && this.status == 200) {
                     if (!isEmpty(_responseObj.body.order_reference)) {
                         bSecureApp.prepareFrame(_responseObj.body);

@@ -1,3 +1,43 @@
+
+<?php
+    $details = [
+        //Because some payment gateways require amount to be multiplied by 100
+        '__00trid__' => $_GET['order_id'],
+        '__01curr__' => $_GET['currency'],
+        '__02trdt__' => "6062262",
+        '__03stamt__' => $_GET['subtotal_amount'],
+        '__04damt__' => $_GET['discount_amount'],
+        '__05tamt__' => $_GET['total_amount'],
+        '__06cname__' => $_GET['customer_name'],
+        '__07ccc__' => $_GET['customer_country_code'],
+        '__08cphn__' => $_GET['customer_phone_number'],
+        '__09cemail__' => $_GET['customer_email'],
+        '__10ccc__' => $_GET['country_name'],
+        '__11cstate__' => $_GET['province_name'],
+        '__12ccity__' => $_GET['city_name'],
+        '__13carea__' => $_GET['area_name'],
+        '__14cfadd__' => $_GET['formatted_address'],
+        '__15mid__' => $_ENV['MERCHANT_ID'],
+        '__16stid__' => $_ENV['STORE_ID'],
+        '__18ver__' => $_ENV['PLUGIN_VERSION'],
+        '__20red__' => $_SERVER['SERVER_NAME']
+    ];
+
+    $salt = $_ENV['CLIENT_ID'].'|'.$_ENV['CLIENT_SECRET'].':'.$_ENV['CLIENT_ENV'];
+    ksort($details);
+    $signature = $salt."&";
+    foreach($details as $key => $value)
+    {
+        $signature .= $value;
+        if(next($details)) {
+            $signature .= "&";
+        }
+    }
+
+    $setSignature = hash_hmac('sha256', $signature, $salt);
+    $details['__17seh__'] = strtoupper($setSignature);
+?>
+
 <?php include 'wrapper/template.php' ?>
 
 <?php startblock('styles') ?>
@@ -133,56 +173,7 @@
 <?php endblock() ?>
 
 <?php startblock('scripts') ?>
-
 <script>
-    let customerName, 
-        customerCountryCode,
-        customerPhoneNumber,
-        redirect_url,
-        customerEmail,
-        customerCountry,
-        customerState,
-        customerCity,
-        customerArea,
-        customerFormattedAddress,
-        orderId,
-        currency,
-        subTotalAmount,
-        discountAmount,
-        totolAmount,
-        merchantId,
-        storeSlug = "";
-
-
-    function fetchTransactionDetails() {
-        sessionStorage.clear();
-        orderId = prompt("Please enter order id", "xtend-001");
-        currency = prompt("Please enter currency", "PKR");
-        redirect_url = prompt("Please enter redirect url", window.location);
-        subTotalAmount = prompt("Please enter subtotal amount", "500");
-        discountAmount = prompt("Please enter discount amount", "50");
-        totolAmount = prompt("Please enter total amount", "450");
-        customerName = prompt("Please enter your customer's name", "Default User");
-        customerCountryCode = prompt("Please enter your customer's country code", "92");
-        customerPhoneNumber = prompt("Please enter your customer's phone number", "3452099688");
-        customerEmail = prompt("Please enter your customer's email", "test1@nextgeni.net");
-        customerCountry = prompt("Please enter your customer's country name", "Pakistan");
-        customerState = prompt("Please enter your customer's province name", "Sindh");
-        customerCity = prompt("Please enter your customer's city name", "Karachi");
-        customerArea = prompt("Please enter your customer's area name", "Karachi Township");
-        customerFormattedAddress = prompt("Please enter your customer's formatted address", "Plot B 450, Sector 11-A Sector 11 A North Karachi Twp, Karachi, Karachi City, Sindh, Pakistan");
-        merchantId = prompt("Please enter your merchant id", "1421");
-        storeSlug = prompt("Please enter your store slug", "ST-005722384");
-
-
-        try {
-            responseListener();
-            setTransactionParameters();
-        } catch (error) {
-            console.log("error found in setTransactionParameters", error);
-        }
-    }
-
     function clearAlerts(elem) {
         if (elem) {
             elem.innerHTML = "";
@@ -221,40 +212,38 @@
         parentContainer.insertBefore(childContainer, parentContainer.firstChild);
     }
 
-    const setTransactionParameters = () => {
-        bSecurePaymentTransactionParameters.__00trid__ = orderId;
-        bSecurePaymentTransactionParameters.__01curr__ = currency;
-        bSecurePaymentTransactionParameters.__02trdt__ = "6062262";
-        bSecurePaymentTransactionParameters.__03stamt__ = subTotalAmount;
-        bSecurePaymentTransactionParameters.__04damt__ = discountAmount;
-        bSecurePaymentTransactionParameters.__05tamt__ = totolAmount;
-        bSecurePaymentTransactionParameters.__06cname__ = customerName;
-        bSecurePaymentTransactionParameters.__07ccc__ = customerCountryCode;
-        bSecurePaymentTransactionParameters.__08cphn__ = customerPhoneNumber;
-        bSecurePaymentTransactionParameters.__09cemail__ = customerEmail;
-        bSecurePaymentTransactionParameters.__10ccc__ = customerCountry;
-        bSecurePaymentTransactionParameters.__11cstate__ = customerState;
-        bSecurePaymentTransactionParameters.__12ccity__ = customerCity;
-        bSecurePaymentTransactionParameters.__13carea__ = customerArea;
-        bSecurePaymentTransactionParameters.__14cfadd__ = customerFormattedAddress;
-        bSecurePaymentTransactionParameters.__15mid__ = merchantId;
-        bSecurePaymentTransactionParameters.__16stid__ = storeSlug;
-        bSecurePaymentTransactionParameters.__17seh__ = "sfasfafasfasf";
-        bSecurePaymentTransactionParameters.__18ver__ = "0.0";
-        bSecurePaymentTransactionParameters.__20red__ = redirect_url;
-        try {
-            initializeEventListener();
-        } catch (error) {
-            console.log("error found in initializeEventListener", error);
-        }
-    };
-
     const initializeEventListener = () => {
+        sessionStorage.clear();
+        responseListener();
+
+        const details = <?php echo  json_encode($details); ?>;
+
+        bSecurePaymentTransactionParameters.__00trid__ = details.__00trid__;
+        bSecurePaymentTransactionParameters.__01curr__ = details.__01curr__;
+        bSecurePaymentTransactionParameters.__02trdt__ = details.__02trdt__;
+        bSecurePaymentTransactionParameters.__03stamt__ = details.__03stamt__;
+        bSecurePaymentTransactionParameters.__04damt__ = details.__04damt__;
+        bSecurePaymentTransactionParameters.__05tamt__ = details.__05tamt__;
+        bSecurePaymentTransactionParameters.__06cname__ = details.__06cname__;
+        bSecurePaymentTransactionParameters.__07ccc__ = details.__07ccc__;
+        bSecurePaymentTransactionParameters.__08cphn__ = details.__08cphn__;
+        bSecurePaymentTransactionParameters.__09cemail__ = details.__09cemail__;
+        bSecurePaymentTransactionParameters.__10ccc__ = details.__10ccc__;
+        bSecurePaymentTransactionParameters.__11cstate__ = details.__11cstate__;
+        bSecurePaymentTransactionParameters.__12ccity__ = details.__12ccity__;
+        bSecurePaymentTransactionParameters.__13carea__ = details.__13carea__;
+        bSecurePaymentTransactionParameters.__14cfadd__ = details.__14cfadd__;
+        bSecurePaymentTransactionParameters.__15mid__ = details.__15mid__;
+        bSecurePaymentTransactionParameters.__16stid__ = details.__16stid__;
+        bSecurePaymentTransactionParameters.__17seh__ = details.__17seh__;
+        bSecurePaymentTransactionParameters.__18ver__ = details.__18ver__;
+        bSecurePaymentTransactionParameters.__20red__ = details.__20red__;
+        
         try {
             document.head.insertAdjacentHTML("beforeend", `<style id="antiClickjack" type="text/css"></style>`);
             bSecureApp.initialize("bSecurePaymentPluginContainer");
         } catch (error) {
-            console.log("error found in initialize", error);
+            console.log("error found in initializeEventListener", error);
         }
     };
 
@@ -279,19 +268,17 @@
             alertHandler(responseMsg, "warning")
         };
         bSecurePaymentPluginResponseHandler.onProcessPaymentFailure = function(data) {
-            alert('Payment Processed Failure')
             sessionStorage.setItem("payment_response", JSON.stringify(data));
             console.log(data);
             window.location.href='/'
         };
         bSecurePaymentPluginResponseHandler.onProcessPaymentSuccess = function(data) {
-            alert('Payment Process Success')
             sessionStorage.setItem("payment_response", JSON.stringify(data));
             console.log(data);
             window.location.href='/'
         };
     };
     
-    fetchTransactionDetails();
+    initializeEventListener();
 </script>
 <?php endblock() ?>
