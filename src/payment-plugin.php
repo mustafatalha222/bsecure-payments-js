@@ -51,7 +51,7 @@
         background-color: #fff;
         -o-object-fit: scale-down;
         object-fit: scale-down;
-        margin: 0 auto 20px auto;
+        margin: 14px auto 20px auto;
     }
 
     #alertContainer {
@@ -60,7 +60,6 @@
         -o-object-fit: scale-down;
         object-fit: scale-down;
         height: 50px;
-        border: 1px solid black;
         transition: visibility 0s linear 0.33s, opacity 0.33s linear;
     }
 
