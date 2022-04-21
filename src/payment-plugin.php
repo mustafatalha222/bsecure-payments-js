@@ -282,6 +282,7 @@
             alertHandler(responseMsg, "warning")
         };
         bSecurePaymentPluginResponseHandler.onProcessPaymentFailure = function(data) {
+            window.location = "/"
             console.log("responseListener : onProcessPaymentFailure: ", data)
             alertHandler(JSON.stringify(data), "danger")
         };
