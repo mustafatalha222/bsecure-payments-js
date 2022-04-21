@@ -178,7 +178,7 @@
 
 
 <?php startblock('body') ?>
-<button type="checkout.php" class="btn-primary">back</button>
+<button type="button" onClick="location.href='/'" class="btn-primary">back</button>
 <div id="bSecurePaymentPluginContainer"></div>
 <?php endblock() ?>
 
