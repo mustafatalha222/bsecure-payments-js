@@ -178,10 +178,8 @@
 
 
 <?php startblock('body') ?>
-<div id="bSecurePaymentPluginContainer"></div>
 <button type="checkout.php" class="btn-primary">back</button>
-    <div id="alertContainer">
-    </div>
+<div id="bSecurePaymentPluginContainer"></div>
 <?php endblock() ?>
 
 <?php startblock('scripts') ?>
