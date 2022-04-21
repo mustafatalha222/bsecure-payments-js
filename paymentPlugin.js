@@ -84,6 +84,7 @@ const bSecurePaymentPluginResponseHandler = {
         throw new Error(msg)
     },
     handleErrors: function (data) {
+        console.log("data.body: ",data)
         const responseCode = (data.status).toString();
         const responseException = data.exception;
         if (!isEmpty(responseException)) {

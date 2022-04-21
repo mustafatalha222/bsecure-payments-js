@@ -279,6 +279,10 @@
             alertHandler(responseMsg, "warning")
         };
         bSecurePaymentPluginResponseHandler.onProcessPaymentFailure = function(data) {
+            window.onbeforeunload = function(e) {
+                return "Are you sure you want to leave?";
+            };
+            window.location = "/"
             console.log("responseListener : onProcessPaymentFailure: ", data)
             document.getElementById('alertContainer').innerHTML = '<div class="alert">'+
                 '<div id="payment_response" class="alert-danger">'+JSON.stringify(data)+'</div>'+
