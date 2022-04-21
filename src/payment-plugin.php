@@ -267,13 +267,13 @@
         };
         bSecurePaymentPluginResponseHandler.onProcessPaymentFailure = function(data) {
             console.log("responseListener : onProcessPaymentFailure: ", data)
-            document.getElementById('payment_response').innerHTML = '<div class="alert">'+
+            document.getElementById('alertContainer').innerHTML = '<div class="alert">'+
                 '<div id="payment_response" class="alert-danger">'+JSON.stringify(data)+'</div>'+
             '</div>';
         };
         bSecurePaymentPluginResponseHandler.onProcessPaymentSuccess = function(data) {
             console.log("responseListener : onProcessPaymentSuccess: ", data)
-            document.getElementById('payment_response').innerHTML = '<div class="alert">'+
+            document.getElementById('alertContainer').innerHTML = '<div class="alert">'+
                 '<div id="payment_response" class="alert-danger">'+JSON.stringify(data)+'</div>'+
             '</div>';
         };
