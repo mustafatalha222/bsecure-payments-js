@@ -95,7 +95,12 @@ const bSecurePaymentPluginResponseHandler = {
         } else if (responseCode === "422") {
             bSecurePaymentPluginResponseHandler.onValidationErrorAlert(data);
         }  else if(!isEmpty(responseCode)) {
-            bSecurePaymentPluginResponseHandler.onErrorAlert(data);
+            console.log(data.body)
+            if(!isEmpty(data.body.result?.original)){
+                bSecurePaymentPluginResponseHandler.onProcessPaymentFailure(data.body.result?.original);
+            }else {
+                bSecurePaymentPluginResponseHandler.onErrorAlert(data);
+            }
         }
     },
     handlePayments: function (data) {
