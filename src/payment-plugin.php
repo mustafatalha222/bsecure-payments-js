@@ -266,12 +266,16 @@
             alertHandler(responseMsg, "warning")
         };
         bSecurePaymentPluginResponseHandler.onProcessPaymentFailure = function(data) {
-            sessionStorage.setItem("payment_response", JSON.stringify(data));
-            console.log(data);
+            console.log("responseListener : onProcessPaymentFailure: ", data)
+            document.getElementById('payment_response').innerHTML = '<div class="alert">'+
+                '<div id="payment_response" class="alert-danger">'+JSON.stringify(data)+'</div>'+
+            '</div>';
         };
         bSecurePaymentPluginResponseHandler.onProcessPaymentSuccess = function(data) {
-            sessionStorage.setItem("payment_response", JSON.stringify(data));
-            console.log(data);
+            console.log("responseListener : onProcessPaymentSuccess: ", data)
+            document.getElementById('payment_response').innerHTML = '<div class="alert">'+
+                '<div id="payment_response" class="alert-danger">'+JSON.stringify(data)+'</div>'+
+            '</div>';
         };
     };
     
