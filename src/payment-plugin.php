@@ -1,3 +1,42 @@
+
+<?php
+    $details = [
+        //Because some payment gateways require amount to be multiplied by 100
+        '__00trid__' => $_GET['order_id'],
+        '__01curr__' => $_GET['currency'],
+        '__02trdt__' => "6062262",
+        '__03stamt__' => $_GET['subtotal_amount'],
+        '__04damt__' => $_GET['discount_amount'],
+        '__05tamt__' => $_GET['total_amount'],
+        '__06cname__' => $_GET['customer_name'],
+        '__07ccc__' => $_GET['customer_country_code'],
+        '__08cphn__' => $_GET['customer_phone_number'],
+        '__09cemail__' => $_GET['customer_email'],
+        '__10ccc__' => $_GET['country_name'],
+        '__11cstate__' => $_GET['province_name'],
+        '__12ccity__' => $_GET['city_name'],
+        '__13carea__' => $_GET['area_name'],
+        '__14cfadd__' => $_GET['formatted_address'],
+        '__15mid__' => $_ENV['MERCHANT_ID'],
+        '__16stid__' => $_ENV['STORE_ID'],
+        '__18ver__' => $_ENV['PLUGIN_VERSION'],
+        '__20red__' => $_SERVER['SERVER_NAME'],
+        '__21cenv__' => $_ENV['CLIENT_ENV'],
+    ];
+    $salt = $_ENV['CLIENT_ID'];
+    ksort($details);
+    $signature = $salt."&";
+    foreach($details as $key => $value)
+    {
+        $signature .= preg_replace("/\s+/", "", $value);
+        if(next($details)) {
+            $signature .= "&";
+        }
+    }
+    $setSignature = hash_hmac('sha256', $signature, $salt);
+    $details['__17seh__'] = strtoupper($setSignature);
+?>
+
 <?php include 'wrapper/template.php' ?>
 
 <?php startblock('styles') ?>
@@ -12,7 +51,7 @@
         background-color: #fff;
         -o-object-fit: scale-down;
         object-fit: scale-down;
-        margin: 0 auto 20px auto;
+        margin: 14px auto 20px auto;
     }
 
     #alertContainer {
@@ -21,7 +60,6 @@
         -o-object-fit: scale-down;
         object-fit: scale-down;
         height: 50px;
-        border: 1px solid black;
         transition: visibility 0s linear 0.33s, opacity 0.33s linear;
     }
 
@@ -116,28 +154,41 @@
     .alert>.alert-danger hr {
         border-top-color: #ecacab;
     }
+    .btn-primary {
+        background-color: #1976d2 !important;
+        border-color: #1976d2 !important;
+        text-transform: none !important;
+        background: #1976d2 !important;
+        color: #ffffff !important;
+        border: solid 1px #1976d2 !important;
+        font-size: 0.9rem !important;
+        font-family: "SF Pro Text";
+        font-weight: normal !important;
+        min-width: 7rem !important;
+        height: 2.7rem !important;
+    }
 </style>
 <?php endblock() ?>
 
 <?php startblock('headerScripts') ?>
 <!-- <script src="../paymentPlugin.js"></script> -->
+<<<<<<< HEAD
 <script src="https://bsecure-dev.s3-eu-west-1.amazonaws.com/stage/bApps/payment-plugin/bsecure-PaymentPlugin.js"></script> 
+=======
+<script src="<?php echo $_ENV['PLUGIN_SCRIPT'] ?>"></script> 
+>>>>>>> 17e921c97e72e4154e8dd992253cf85c224e9e81
 <?php endblock() ?>
 
 
 
 <?php startblock('body') ?>
-<div id="alertContainer">
-    <div class="alert">
-
-    </div>
-</div>
+<button type="button" onClick="location.href='/'" class="btn-primary">back</button>
 <div id="bSecurePaymentPluginContainer"></div>
 <?php endblock() ?>
 
 <?php startblock('scripts') ?>
-
 <script>
+<<<<<<< HEAD
     let customerName, 
         customerCountryCode,
         customerPhoneNumber,
@@ -185,6 +236,11 @@
         }
     }
 
+=======
+            window.onbeforeunload = function(e) {
+                return "Are you sure you want to leave?";
+            };
+>>>>>>> 17e921c97e72e4154e8dd992253cf85c224e9e81
     function clearAlerts(elem) {
         if (elem) {
             elem.innerHTML = "";
@@ -223,40 +279,39 @@
         parentContainer.insertBefore(childContainer, parentContainer.firstChild);
     }
 
-    const setTransactionParameters = () => {
-        bSecurePaymentTransactionParameters.__00trid__ = orderId;
-        bSecurePaymentTransactionParameters.__01curr__ = currency;
-        bSecurePaymentTransactionParameters.__02trdt__ = "6062262";
-        bSecurePaymentTransactionParameters.__03stamt__ = subTotalAmount;
-        bSecurePaymentTransactionParameters.__04damt__ = discountAmount;
-        bSecurePaymentTransactionParameters.__05tamt__ = totolAmount;
-        bSecurePaymentTransactionParameters.__06cname__ = customerName;
-        bSecurePaymentTransactionParameters.__07ccc__ = customerCountryCode;
-        bSecurePaymentTransactionParameters.__08cphn__ = customerPhoneNumber;
-        bSecurePaymentTransactionParameters.__09cemail__ = customerEmail;
-        bSecurePaymentTransactionParameters.__10ccc__ = customerCountry;
-        bSecurePaymentTransactionParameters.__11cstate__ = customerState;
-        bSecurePaymentTransactionParameters.__12ccity__ = customerCity;
-        bSecurePaymentTransactionParameters.__13carea__ = customerArea;
-        bSecurePaymentTransactionParameters.__14cfadd__ = customerFormattedAddress;
-        bSecurePaymentTransactionParameters.__15mid__ = merchantId;
-        bSecurePaymentTransactionParameters.__16stid__ = storeSlug;
-        bSecurePaymentTransactionParameters.__17seh__ = "sfasfafasfasf";
-        bSecurePaymentTransactionParameters.__18ver__ = "0.0";
-        bSecurePaymentTransactionParameters.__20red__ = redirect_url;
-        try {
-            initializeEventListener();
-        } catch (error) {
-            console.log("error found in initializeEventListener", error);
-        }
-    };
-
     const initializeEventListener = () => {
+        sessionStorage.clear();
+        responseListener();
+
+        const details = <?php echo  json_encode($details); ?>;
+
+        bSecurePaymentTransactionParameters.__00trid__ = details.__00trid__;
+        bSecurePaymentTransactionParameters.__01curr__ = details.__01curr__;
+        bSecurePaymentTransactionParameters.__02trdt__ = details.__02trdt__;
+        bSecurePaymentTransactionParameters.__03stamt__ = details.__03stamt__;
+        bSecurePaymentTransactionParameters.__04damt__ = details.__04damt__;
+        bSecurePaymentTransactionParameters.__05tamt__ = details.__05tamt__;
+        bSecurePaymentTransactionParameters.__06cname__ = details.__06cname__;
+        bSecurePaymentTransactionParameters.__07ccc__ = details.__07ccc__;
+        bSecurePaymentTransactionParameters.__08cphn__ = details.__08cphn__;
+        bSecurePaymentTransactionParameters.__09cemail__ = details.__09cemail__;
+        bSecurePaymentTransactionParameters.__10ccc__ = details.__10ccc__;
+        bSecurePaymentTransactionParameters.__11cstate__ = details.__11cstate__;
+        bSecurePaymentTransactionParameters.__12ccity__ = details.__12ccity__;
+        bSecurePaymentTransactionParameters.__13carea__ = details.__13carea__;
+        bSecurePaymentTransactionParameters.__14cfadd__ = details.__14cfadd__;
+        bSecurePaymentTransactionParameters.__15mid__ = details.__15mid__;
+        bSecurePaymentTransactionParameters.__16stid__ = details.__16stid__;
+        bSecurePaymentTransactionParameters.__17seh__ = details.__17seh__;
+        bSecurePaymentTransactionParameters.__18ver__ = details.__18ver__;
+        bSecurePaymentTransactionParameters.__20red__ = details.__20red__;
+        bSecurePaymentTransactionParameters.__21cenv__ = details.__21cenv__;
+        
         try {
             document.head.insertAdjacentHTML("beforeend", `<style id="antiClickjack" type="text/css"></style>`);
             bSecureApp.initialize("bSecurePaymentPluginContainer");
         } catch (error) {
-            console.log("error found in initialize", error);
+            console.log("error found in initializeEventListener", error);
         }
     };
 
@@ -266,7 +321,7 @@
             console.log("responseListener : onErrorAlert: ", data)
             const responseMsg = data.message;
             const responseType = data.type;
-            alertHandler(responseMsg, "error")
+            alertHandler(responseMsg, "danger")
         };
         bSecurePaymentPluginResponseHandler.onSuccessAlert = function(data) {
             console.log("responseListener : onSuccessAlert: ", data)
@@ -281,19 +336,17 @@
             alertHandler(responseMsg, "warning")
         };
         bSecurePaymentPluginResponseHandler.onProcessPaymentFailure = function(data) {
-            alert('Payment Processed Failure')
-            localStorage.setItem("payment_response", JSON.stringify(data));
-            console.log(data);
-            document.location.href='/'
+            window.location = "/"
+            console.log("responseListener : onProcessPaymentFailure: ", data)
+            alertHandler(JSON.stringify(data), "danger")
         };
         bSecurePaymentPluginResponseHandler.onProcessPaymentSuccess = function(data) {
-            alert('Payment Process Success')
-            localStorage.setItem("payment_response", JSON.stringify(data));
-            console.log(data);
-            document.location.href='/'
+            window.location = "/"
+            console.log("responseListener : onProcessPaymentSuccess: ", data)
+            alertHandler(JSON.stringify(data), "success")
         };
     };
     
-    fetchTransactionDetails();
+    initializeEventListener();
 </script>
 <?php endblock() ?>

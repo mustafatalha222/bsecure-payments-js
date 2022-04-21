@@ -1,7 +1,4 @@
-const referrer = location.host;
-const bSecurePaymentTransactionURL = "https://api-dev.bsecure.app/";
-const bSecurePaymentCreateOrderEndpoint = "v1/payment-plugin/create-order";
-const bSecurePaymentIframeURL = "https://bsecure-payment-plugin.herokuapp.com/"
+const bSecurePaymentTransactionURL = "https://api-dev.bsecure.app/v1/payment-plugin/create-order";
 
 function isEmpty(x) {
     return (
@@ -14,7 +11,7 @@ function isEmpty(x) {
         x.length === 0 ||
         (x === "object" && Object.key(x).length === 0) ||
         x === "" ||
-        (x // 👈 null and undefined check
+        (x // ðŸ‘ˆ null and undefined check
             && Object.keys(x).length === 0
             && Object.getPrototypeOf(x) === Object.prototype)
     );
@@ -35,7 +32,7 @@ function checkEmptyHtml(id, checkChildNode = false) {
 //Transaction Parameters
 const bSecurePaymentTransactionParameters = {
     __00trid__: "", //              pp_OrderId
-    __01curr__: "PKR", //			      pp_TxnCurrency
+    __01curr__: "PKR", //			pp_TxnCurrency
     __02trdt__: "", //              pp_TxnDateTime
     __03stamt__: "", //             pp_TxnSubTotal
     __04damt__: "", //              pp_TxnDiscount
@@ -54,7 +51,8 @@ const bSecurePaymentTransactionParameters = {
     __17seh__: "1.1", //
     __18ver__: "", // 				pp_Version
     __19lan__: "EN", //             pp_Language
-    __20red__: "", //             pp_RedirectURL
+    __20red__: "", //               pp_RedirectURL
+    __21cenv__: ""//                pp_Environment
 }
 
 
@@ -86,6 +84,7 @@ const bSecurePaymentPluginResponseHandler = {
         throw new Error(msg)
     },
     handleErrors: function (data) {
+        console.log("data.body: ",data)
         const responseCode = (data.status).toString();
         const responseException = data.exception;
         if (!isEmpty(responseException)) {
@@ -96,15 +95,21 @@ const bSecurePaymentPluginResponseHandler = {
             bSecurePaymentPluginResponseHandler.onSuccessAlert(data);
         } else if (responseCode === "422") {
             bSecurePaymentPluginResponseHandler.onValidationErrorAlert(data);
-        }  else {
-            bSecurePaymentPluginResponseHandler.onErrorAlert(data);
+        }  else if(!isEmpty(responseCode)) {
+            console.log(data.body)
+            if(!isEmpty(data.body.result?.original)){
+                bSecurePaymentPluginResponseHandler.onProcessPaymentFailure(data.body.result?.original);
+            }else {
+                bSecurePaymentPluginResponseHandler.onErrorAlert(data);
+            }
         }
     },
     handlePayments: function (data) {
+        console.log(data);
         const responseCode = (data.status).toString();
-
         if (responseCode.startsWith(2)) {
             bSecurePaymentPluginResponseHandler.onProcessPaymentSuccess(data);
+            bSecureApp.resetFrame();
         } else {
             bSecurePaymentPluginResponseHandler.onProcessPaymentFailure(data);
         }
@@ -112,55 +117,6 @@ const bSecurePaymentPluginResponseHandler = {
 }
 
 
-function generateOrder() { //Create Token
-    var xhttp = new XMLHttpRequest();
-    var _url = bSecurePaymentTransactionURL + bSecurePaymentCreateOrderEndpoint;
-    xhttp.onreadystatechange = function () {
-        var _data = this;
-        if (this.readyState == 4) {
-            var _responseObj = JSON.parse(_data.response);
-            if (!isEmpty(_responseObj.body) && this.status == 200) {
-                if (!isEmpty(_responseObj.body.order_reference)) {
-                    bSecureApp.prepareFrame(_responseObj.body.order_reference);
-                } else {
-                    bSecurePaymentPluginResponseHandler.handleErrors(_responseObj);
-                }
-            } else {
-                bSecurePaymentPluginResponseHandler.handleErrors(_responseObj);
-            }
-        }
-    };
-
-    xhttp.open("POST", _url, true);
-    xhttp.setRequestHeader("Content-Type", "application/json");
-    xhttp.send(JSON.stringify({
-        "redirect_url": bSecurePaymentTransactionParameters.__20red__,
-        "plugin_version": bSecurePaymentTransactionParameters.__18ver__,
-        "hash": bSecurePaymentTransactionParameters.__17seh__,
-        "merchant_id": bSecurePaymentTransactionParameters.__15mid__,
-        "store_id": bSecurePaymentTransactionParameters.__16stid__,
-        "customer": {
-            "name": bSecurePaymentTransactionParameters.__06cname__,
-            "email": bSecurePaymentTransactionParameters.__09cemail__,
-            "country_code": bSecurePaymentTransactionParameters.__07ccc__,
-            "phone_number": bSecurePaymentTransactionParameters.__08cphn__
-        },
-        "customer_address": {
-            "country": bSecurePaymentTransactionParameters.__10ccc__,
-            "province": bSecurePaymentTransactionParameters.__11cstate__,
-            "city": bSecurePaymentTransactionParameters.__12ccity__,
-            "area": bSecurePaymentTransactionParameters.__13carea__,
-            "address": bSecurePaymentTransactionParameters.__14cfadd__
-        },
-        "order": {
-            "order_id": bSecurePaymentTransactionParameters.__00trid__,
-            "currency": bSecurePaymentTransactionParameters.__01curr__,
-            "sub_total_amount": bSecurePaymentTransactionParameters.__03stamt__,
-            "discount_amount": bSecurePaymentTransactionParameters.__04damt__,
-            "total_amount": bSecurePaymentTransactionParameters.__05tamt__
-        }
-    }));
-}
 
 const bSecureApp = {
     initialize: function (objectId) {
@@ -172,17 +128,67 @@ const bSecureApp = {
             } else {
                 const iframeListenerPrepared = bSecureApp.prepareFrameListener();
                 if (iframeListenerPrepared) {
-                    generateOrder();
+                    bSecureApp.generateOrder();
                 }
             }
         }
     },
-
-
-    prepareFrame: function (order_reference) {
+    generateOrder: function () {
+        const xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            var _data = this;
+            if (this.readyState == 4) {
+                var _responseObj = JSON.parse(_data.response);
+                console.log("_responseObj: ", _responseObj)
+                if (!isEmpty(_responseObj.body) && this.status == 200) {
+                    if (!isEmpty(_responseObj.body.order_reference)) {
+                        bSecureApp.prepareFrame(_responseObj.body);
+                    } else {
+                        bSecurePaymentPluginResponseHandler.handleErrors(_responseObj);
+                    }
+                } else {
+                    bSecurePaymentPluginResponseHandler.handleErrors(_responseObj);
+                }
+            }
+        };
+    
+        xhttp.open("POST", bSecurePaymentTransactionURL, true);
+        xhttp.setRequestHeader("Content-Type", "application/json");
+        xhttp.send(JSON.stringify({
+            "redirect_url": bSecurePaymentTransactionParameters.__20red__,
+            "plugin_version": bSecurePaymentTransactionParameters.__18ver__,
+            "hash": bSecurePaymentTransactionParameters.__17seh__,
+            "merchant_id": bSecurePaymentTransactionParameters.__15mid__,
+            "store_id": bSecurePaymentTransactionParameters.__16stid__,
+            "txn_reference": bSecurePaymentTransactionParameters.__02trdt__,
+            "env_id": parseInt(bSecurePaymentTransactionParameters.__21cenv__),
+            "customer": {
+                "name": bSecurePaymentTransactionParameters.__06cname__,
+                "email": bSecurePaymentTransactionParameters.__09cemail__,
+                "country_code": bSecurePaymentTransactionParameters.__07ccc__,
+                "phone_number": bSecurePaymentTransactionParameters.__08cphn__
+            },
+            "customer_address": {
+                "country": bSecurePaymentTransactionParameters.__10ccc__,
+                "province": bSecurePaymentTransactionParameters.__11cstate__,
+                "city": bSecurePaymentTransactionParameters.__12ccity__,
+                "area": bSecurePaymentTransactionParameters.__13carea__,
+                "address": bSecurePaymentTransactionParameters.__14cfadd__
+            },
+            "order": {
+                "order_id": bSecurePaymentTransactionParameters.__00trid__,
+                "currency": bSecurePaymentTransactionParameters.__01curr__,
+                "sub_total_amount": bSecurePaymentTransactionParameters.__03stamt__,
+                "discount_amount": bSecurePaymentTransactionParameters.__04damt__,
+                "total_amount": bSecurePaymentTransactionParameters.__05tamt__
+            }
+        }));
+    },
+    prepareFrame: function (body) {
+        const { checkout_url} = body
         const ifrm = document.createElement("iframe");
-        let url = new URL(bSecurePaymentIframeURL);
-        url.searchParams.append('order_ref', JSON.stringify(order_reference));
+        let url = new URL(checkout_url);
+        // url.searchParams.append('order_ref', JSON.stringify(order_reference));
 
         ifrm.setAttribute("src", url.href);
         ifrm.setAttribute("id", 'bSecurePaymentPluginEmbeddedIframe');
@@ -194,6 +200,9 @@ const bSecureApp = {
         ifrm.style.width = "100%";
         ifrm.style.height = "100%";
         document.getElementById("bSecurePaymentPluginContainer").appendChild(ifrm);
+    },
+    resetFrame: function () {
+        document.getElementById("bSecurePaymentPluginContainer").remove();
     },
     prepareFrameListener: function () {
         /*
@@ -254,6 +263,9 @@ const bSecureApp = {
             bSecurePaymentPluginResponseHandler.formatValidationError("pp_Version is required.");
             return false;
         } else if (isEmpty(bSecurePaymentTransactionParameters.__20red__)) {
+            bSecurePaymentPluginResponseHandler.formatValidationError("pp_RedirectURL is required.");
+            return false;
+        }  else if (isEmpty(bSecurePaymentTransactionParameters.__21cenv__)) {
             bSecurePaymentPluginResponseHandler.formatValidationError("pp_RedirectURL is required.");
             return false;
         } else if(!navigator.cookieEnabled) {
