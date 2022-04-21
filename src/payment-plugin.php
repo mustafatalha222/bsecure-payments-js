@@ -184,6 +184,9 @@
 
 <?php startblock('scripts') ?>
 <script>
+            window.onbeforeunload = function(e) {
+                return "Are you sure you want to leave?";
+            };
     function clearAlerts(elem) {
         if (elem) {
             elem.innerHTML = "";
@@ -279,16 +282,13 @@
             alertHandler(responseMsg, "warning")
         };
         bSecurePaymentPluginResponseHandler.onProcessPaymentFailure = function(data) {
-            window.onbeforeunload = function(e) {
-                return "Are you sure you want to leave?";
-            };
-            window.location = "/"
             console.log("responseListener : onProcessPaymentFailure: ", data)
             document.getElementById('alertContainer').innerHTML = '<div class="alert">'+
                 '<div id="payment_response" class="alert-danger">'+JSON.stringify(data)+'</div>'+
             '</div>';
         };
         bSecurePaymentPluginResponseHandler.onProcessPaymentSuccess = function(data) {
+            window.location = "/"
             console.log("responseListener : onProcessPaymentSuccess: ", data)
             document.getElementById('alertContainer').innerHTML = '<div class="alert">'+
                 '<div id="payment_response" class="alert-danger">'+JSON.stringify(data)+'</div>'+
