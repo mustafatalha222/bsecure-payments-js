@@ -11,7 +11,12 @@
 </head>
 
 <body>
-    <div id="payment_response"></div>
+    
+    <div id="alertContainer">
+        <div class="alert">
+            <div id="payment_response" class="alert-danger"></div>
+        </div>
+    </div>
     <?php startblock('body') ?>
     <?php endblock() ?>
 </body>
