@@ -172,11 +172,7 @@
 
 <?php startblock('headerScripts') ?>
 <!-- <script src="../paymentPlugin.js"></script> -->
-<<<<<<< HEAD
-<script src="https://bsecure-dev.s3-eu-west-1.amazonaws.com/stage/bApps/payment-plugin/bsecure-PaymentPlugin.js"></script> 
-=======
 <script src="<?php echo $_ENV['PLUGIN_SCRIPT'] ?>"></script> 
->>>>>>> 17e921c97e72e4154e8dd992253cf85c224e9e81
 <?php endblock() ?>
 
 
@@ -188,59 +184,9 @@
 
 <?php startblock('scripts') ?>
 <script>
-<<<<<<< HEAD
-    let customerName, 
-        customerCountryCode,
-        customerPhoneNumber,
-        redirect_url,
-        customerEmail,
-        customerCountry,
-        customerState,
-        customerCity,
-        customerArea,
-        customerFormattedAddress,
-        orderId,
-        currency,
-        subTotalAmount,
-        discountAmount,
-        totolAmount,
-        merchantId,
-        storeSlug = "";
-
-
-    function fetchTransactionDetails() {
-        orderId = prompt("Please enter order id", "xtend-001");
-        currency = prompt("Please enter currency", "PKR");
-        redirect_url = prompt("Please enter redirect url", window.location);
-        subTotalAmount = prompt("Please enter subtotal amount", "500");
-        discountAmount = prompt("Please enter discount amount", "50");
-        totolAmount = prompt("Please enter total amount", "450");
-        customerName = prompt("Please enter your customer's name", "Default User");
-        customerCountryCode = prompt("Please enter your customer's country code", "92");
-        customerPhoneNumber = prompt("Please enter your customer's phone number", "3452099688");
-        customerEmail = prompt("Please enter your customer's email", "test1@nextgeni.net");
-        customerCountry = prompt("Please enter your customer's country name", "Pakistan");
-        customerState = prompt("Please enter your customer's province name", "Sindh");
-        customerCity = prompt("Please enter your customer's city name", "Karachi");
-        customerArea = prompt("Please enter your customer's area name", "Karachi Township");
-        customerFormattedAddress = prompt("Please enter your customer's formatted address", "Plot B 450, Sector 11-A Sector 11 A North Karachi Twp, Karachi, Karachi City, Sindh, Pakistan");
-        merchantId = prompt("Please enter your merchant id", "2044");
-        storeSlug = prompt("Please enter your store slug", "ST-001742404");
-
-
-        try {
-            responseListener();
-            setTransactionParameters();
-        } catch (error) {
-            console.log("error found in setTransactionParameters", error);
-        }
-    }
-
-=======
             window.onbeforeunload = function(e) {
                 return "Are you sure you want to leave?";
             };
->>>>>>> 17e921c97e72e4154e8dd992253cf85c224e9e81
     function clearAlerts(elem) {
         if (elem) {
             elem.innerHTML = "";
