@@ -128,7 +128,9 @@
 <?php startblock('scripts') ?>
 <script>
     if(sessionStorage.getItem("payment_response")){
-        document.getElementById('payment_response').innerHTML = sessionStorage.getItem("payment_response");
+        document.getElementById('payment_response').innerHTML = '<div class="alert">'+
+            '<div id="payment_response" class="alert-danger">'+sessionStorage.getItem("payment_response")+'</div>'+
+        '</div>';
     }
 </script>
 <?php endblock() ?>

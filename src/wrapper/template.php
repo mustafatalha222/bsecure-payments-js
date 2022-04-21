@@ -13,9 +13,6 @@
 <body>
     
     <div id="alertContainer">
-        <div class="alert">
-            <div id="payment_response" class="alert-danger"></div>
-        </div>
     </div>
     <?php startblock('body') ?>
     <?php endblock() ?>

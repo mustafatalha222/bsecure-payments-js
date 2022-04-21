@@ -166,8 +166,6 @@
 
 
 <?php startblock('body') ?>
-<div id="alertContainer">
-</div>
 <div id="bSecurePaymentPluginContainer"></div>
 <?php endblock() ?>
 
@@ -270,12 +268,10 @@
         bSecurePaymentPluginResponseHandler.onProcessPaymentFailure = function(data) {
             sessionStorage.setItem("payment_response", JSON.stringify(data));
             console.log(data);
-            window.location.href='/'
         };
         bSecurePaymentPluginResponseHandler.onProcessPaymentSuccess = function(data) {
             sessionStorage.setItem("payment_response", JSON.stringify(data));
             console.log(data);
-            window.location.href='/'
         };
     };
     
