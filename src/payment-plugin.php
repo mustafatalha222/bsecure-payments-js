@@ -166,6 +166,9 @@
 
 <?php startblock('body') ?>
 <div id="bSecurePaymentPluginContainer"></div>
+    <div id="alertContainer">
+<button type="checkout.php" class="btn-primary">Pay via bSecure</button>
+    </div>
 <?php endblock() ?>
 
 <?php startblock('scripts') ?>
