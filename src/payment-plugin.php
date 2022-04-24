@@ -20,6 +20,7 @@
         '__15mid__' => $_ENV['MERCHANT_ID'],
         '__16stid__' => $_ENV['STORE_ID'],
         '__18ver__' => $_ENV['PLUGIN_VERSION'],
+        '__19lan__' => "EN",
         '__20red__' => $_SERVER['SERVER_NAME'],
         '__21cenv__' => $_ENV['CLIENT_ENV'],
     ];
@@ -250,6 +251,7 @@
         bSecurePaymentTransactionParameters.__16stid__ = details.__16stid__;
         bSecurePaymentTransactionParameters.__17seh__ = details.__17seh__;
         bSecurePaymentTransactionParameters.__18ver__ = details.__18ver__;
+        bSecurePaymentTransactionParameters.__19lan__ = "EN";
         bSecurePaymentTransactionParameters.__20red__ = details.__20red__;
         bSecurePaymentTransactionParameters.__21cenv__ = details.__21cenv__;
         
