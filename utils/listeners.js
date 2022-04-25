@@ -3,7 +3,7 @@ var _require = require("./"),
     isJson = _require.isJson;
 const EventEmitter = require('events');
 // Initializing event emitter instances 
-const bSecurePaymentsEventHandler = new new EventEmitter();
+const bSecurePaymentsEventHandler = new EventEmitter();
 
 
 const bSecurePaymentsSubscribeEventHandler = {
