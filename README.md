@@ -170,7 +170,7 @@ Merchant has to add below mention **HTML** code on its website
 ```JavaScript
 import {
     TransactionParameters,
-} from "bsecure-payments"
+} from "bsecure-payments-js"
 
 
 TransactionParameters.__00trid__   = "<order-id>";
@@ -216,7 +216,7 @@ TransactionParameters.__17seh__ = _hash.toUpperCase();
 ```JavaScript
 import {
     bSecurePaymentsHandler,
-} from "bsecure-payments"
+} from "bsecure-payments-js"
 
 bSecurePaymentsHandler.initialize();
 bSecurePaymentsHandler.onErrorAlert = function (msg) {
@@ -242,7 +242,7 @@ bSecurePaymentsHandler.onProcessPaymentFailure = function (msg) {
 ```JavaScript
 import {
     bSecurePayments,
-} from "bsecure-payments"
+} from "bsecure-payments-js"
 
 bSecurePayments.initialize("bSecurePaymentPluginContainer");
 ```
