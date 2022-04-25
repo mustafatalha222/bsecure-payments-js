@@ -172,8 +172,8 @@
 <?php endblock() ?>
 
 <?php startblock('headerScripts') ?>
-<!-- <script src="../paymentPlugin.js"></script> -->
-<script src="<?php echo $_ENV['PLUGIN_SCRIPT'] ?>"></script> 
+<script src="../paymentPlugin.js"></script>
+<!-- <script src="<?php echo $_ENV['PLUGIN_SCRIPT'] ?>"></script>  -->
 <?php endblock() ?>
 
 
@@ -227,7 +227,6 @@
     }
 
     const initializeEventListener = () => {
-        sessionStorage.clear();
         responseListener();
 
         const details = <?php echo  json_encode($details); ?>;
