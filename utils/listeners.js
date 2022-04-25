@@ -1,6 +1,7 @@
 var _require = require("./"),
     isEmpty = _require.isEmpty,
-    isJson = _require.isJson;
+    isJson = _require.isJson,
+    resetFrame = _require.resetFrame;
 const EventEmitter = require('events');
 // Initializing event emitter instances 
 const bSecurePaymentsEventHandler = new EventEmitter();

@@ -18,7 +18,7 @@ function generateOrder(TransactionParameters) {
             if (this.readyState == 4) {
                 var _responseObj = JSON.parse(_data.response);
                 if (!isEmpty(_responseObj.body) && this.status == 200) {
-                    if (!isEmpty(_responseObj.body.order_reference)) {
+                    if (!isEmpty(_responseObj.body.checkout_url)) {
                         prepareFrame(_responseObj.body.checkout_url);
                     } else {
                         errorHandlers.handleErrors(_responseObj);
