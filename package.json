@@ -1,0 +1,40 @@
+{
+  "name": "bsecure-payments-js",
+  "version": "1.0.7",
+  "description": "bSecure Payment Plugin is a JavaScript library that allows you to securely process your payments. This plugin instantly creates a form that adheres to PCI, HIPAA, GDPR, or CCPA security requirements.",
+  "main": "lib/index.js",
+  "keywords": [
+    "payments",
+    "node",
+    "payment plugin",
+    "bsecure-payment-plugin",
+    "bsecure",
+    "bsecure",
+    "payment",
+    "payment gateway"
+  ],
+  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bSecureCheckout/bsecure-payments-js.git"
+  },
+  "author": "https://github.com/bSecureCheckout/bsecure-payments-js/graphs/contributors",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bSecureCheckout/bsecure-payments-js/issues"
+  },
+  "homepage": "https://github.com/bSecureCheckout/bsecure-payments-js#readme",
+  "devDependencies": {},
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
