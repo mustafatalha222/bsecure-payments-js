@@ -185,9 +185,6 @@
 
 <?php startblock('scripts') ?>
 <script>
-            window.onbeforeunload = function(e) {
-                return "Are you sure you want to leave?";
-            };
     function clearAlerts(elem) {
         if (elem) {
             elem.innerHTML = "";
@@ -218,7 +215,7 @@
         parentContainer.classList.add("show");
         setTimeout(function() {
             clearAlerts(parentContainer);
-        }, 5000);
+        }, 10000);
         // append theKid to the end of theParent
         parentContainer.appendChild(childContainer);
 
@@ -264,6 +261,9 @@
 
 
     const responseListener = () => {
+            window.onbeforeunload = function(e) {
+                return "Are you sure you want to leave?";
+            };
         bSecurePaymentPluginResponseHandler.onErrorAlert = function(data) {
             console.log("responseListener : onErrorAlert: ", data)
             const responseMsg = data.message;

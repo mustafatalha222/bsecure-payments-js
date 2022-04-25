@@ -142,7 +142,7 @@ const bSecureApp = {
         xhttp.onreadystatechange = function () {
             var _data = this;
             if (this.readyState == 4) {
-                var _responseObj = isJson(_data.response);
+                var _responseObj = JSON.parse(_data.response);
                 if (!isEmpty(_responseObj.body) && this.status == 200) {
                     if (!isEmpty(_responseObj.body.order_reference)) {
                         bSecureApp.prepareFrame(_responseObj.body);
