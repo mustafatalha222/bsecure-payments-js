@@ -1,7 +1,6 @@
 var _require = require("./"),
     isEmpty = _require.isEmpty,
-    isJson = _require.isJson,
-    resetFrame = _require.resetFrame;
+    isJson = _require.isJson;
 const EventEmitter = require('events');
 // Initializing event emitter instances 
 const bSecurePaymentsEventHandler = new EventEmitter();
@@ -88,7 +87,8 @@ const errorHandlers = {
         } else if (responseCode === "422") {
             bSecurePaymentsHandler.onValidationErrorAlert(data);
         } else if (!isEmpty(responseCode)) {
-            if (!isEmpty(data.body.result.original)) {
+            const _dataBody = data.body;
+            if (!isEmpty(_dataBody) && _dataBody.hasOwnProperty(result) && !isEmpty(_dataBody.result.original)) {
                 bSecurePaymentsHandler.onProcessPaymentFailure(data.body.result.original);
             } else {
                 bSecurePaymentsHandler.onErrorAlert(data);
@@ -99,7 +99,6 @@ const errorHandlers = {
         const responseCode = (data.status).toString();
         if (responseCode.startsWith(2)) {
             bSecurePaymentsHandler.onProcessPaymentSuccess(data);
-            resetFrame();
         } else {
             bSecurePaymentsHandler.onProcessPaymentFailure(data);
         }

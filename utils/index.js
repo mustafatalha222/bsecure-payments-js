@@ -10,7 +10,10 @@ function isEmpty(x) {
         x === 'undefined' ||
         x === false ||
         x.length === 0 ||
-        x === ''
+        x === ''||
+        (x === "object" && Object.key(x).length === 0) ||
+        (x && Object.keys(x).length === 0
+        && Object.getPrototypeOf(x) === Object.prototype)
     );
 }
 
@@ -32,7 +35,7 @@ function checkEmptyHtml(id, checkChildNode = false) {
     return false;
 }
 
-function prepareFrame(id = "bSecurePaymentPluginContainer", checkout_url) {
+function prepareFrame(checkout_url) {
     const ifrm = document.createElement("iframe");
     let url = new URL(checkout_url);
 
@@ -45,12 +48,12 @@ function prepareFrame(id = "bSecurePaymentPluginContainer", checkout_url) {
     ifrm.style.left = "0";
     ifrm.style.width = "100%";
     ifrm.style.height = "100%";
-    document.getElementById(id).appendChild(ifrm);
+    document.getElementById("bSecurePaymentPluginContainer").appendChild(ifrm);
 }
 
 
-function resetFrame(id = "bSecurePaymentPluginContainer") {
-    document.getElementById(id).remove();
+function resetFrame() {
+    document.getElementById("bSecurePaymentPluginContainer").remove();
 }
 
 module.exports = {
