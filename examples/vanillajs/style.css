@@ -1,0 +1,103 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+   }
+   
+   body {
+	   font-family: 'Raleway', sans-serif;
+   }
+   
+   .container {
+	width: 100%;
+	margin-top: 30px;
+   }
+   
+   .form {
+	position: relative;
+	top: 0;
+	right: 0;
+	width: 100%;
+	height: auto;
+	background: #fff;
+   }
+   
+   .form-section {
+	width: 80%;
+	max-width: 700px;
+	margin: auto;
+   }
+   
+   .group {
+	margin-bottom: 10px;
+	flex: 1 0 40%;
+   }
+
+   .control {
+	width: 100%;
+	padding: 5px;
+	border-top: 0;
+	border-left: 0;
+	border-right: 0;
+	border-bottom: 1px solid silver;
+	border-radius: 0;
+	transition: all 2s;
+   }
+   
+   .control:focus {
+	outline: none;
+	border-bottom-color: blue;
+   }
+   
+   .btn {
+	display: block;
+	width: 100%;
+	padding: 13px;
+	border-radius: 30px;
+	background-image: linear-gradient(to right, #08CCFD, #0379FD);
+	color: #fff;
+	border:0;
+	font-size: 18px;
+	font-weight: 200;
+   }
+   
+   .m20 {
+	margin-top: 20px;
+   }
+   
+   .link {
+	text-decoration: none;
+	color: silver;
+	font-weight: 300;
+   }
+   
+   .heading {
+	font-size: 25px;
+	letter-spacing: 2px;
+	font-weight: 200;
+   
+   }
+   
+.d-flex{
+	display: flex;
+	gap:10px;
+	flex-wrap: wrap;
+}
+
+label{
+	font-size: small;
+}
+.heading2{
+	font-size: 17px;
+	letter-spacing: 1px;
+
+   }
+
+@media only screen and (max-width: 600px){
+	.d-flex{
+		display: block;
+	}
+	.group{
+		width: 100%;
+	}
+}

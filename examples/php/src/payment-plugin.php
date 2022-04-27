@@ -5,26 +5,27 @@
         '__00trid__' => $_GET['order_id'],
         '__01curr__' => $_GET['currency'],
         '__02trdt__' => "6062262",
-        '__03stamt__' => $_GET['subtotal_amount'],
-        '__04damt__' => $_GET['discount_amount'],
-        '__05tamt__' => $_GET['total_amount'],
-        '__06cname__' => $_GET['customer_name'],
-        '__07ccc__' => $_GET['customer_country_code'],
-        '__08cphn__' => $_GET['customer_phone_number'],
-        '__09cemail__' => $_GET['customer_email'],
-        '__10ccc__' => $_GET['country_name'],
-        '__11cstate__' => $_GET['province_name'],
-        '__12ccity__' => $_GET['city_name'],
-        '__13carea__' => $_GET['area_name'],
-        '__14cfadd__' => $_GET['formatted_address'],
-        '__15mid__' => $_ENV['MERCHANT_ID'],
-        '__16stid__' => $_ENV['STORE_ID'],
+        '__03stamt__' => $_GET['sub_total'],
+        '__04damt__' => $_GET['discount'],
+        '__05tamt__' => $_GET['total'],
+        '__06cname__' => $_GET['name'],
+        '__07ccc__' => $_GET['country_code'],
+        '__08cphn__' => $_GET['phone'],
+        '__09cemail__' => $_GET['email'],
+        '__10ccc__' => $_GET['country'],
+        '__11cstate__' => $_GET['province'],
+        '__12ccity__' => $_GET['city'],
+        '__13carea__' => $_GET['area'],
+        '__14cfadd__' => $_GET['address'],
+        '__15mid__' => $_GET['merchant_id'],
+        '__16stid__' => $_GET['store_id'],
         '__18ver__' => $_ENV['PLUGIN_VERSION'],
         '__19lan__' => "EN",
         '__20red__' => $_SERVER['SERVER_NAME'],
-        '__21cenv__' => $_ENV['CLIENT_ENV'],
+        '__21cenv__' => $_GET['client_id'],
     ];
-    $salt = $_ENV['CLIENT_ID'];
+    // delete bSecurePaymentTransactionParameters.__17seh__ ; <---might be needs to be deleted
+    $salt = $_GET['client_id'];
     ksort($details);
     $signature = $salt."&";
     foreach($details as $key => $value)
@@ -172,7 +173,6 @@
 <?php endblock() ?>
 
 <?php startblock('headerScripts') ?>
-<!-- <script src="../paymentPlugin.js"></script> -->
 <script src="<?php echo $_ENV['PLUGIN_SCRIPT'] ?>"></script> 
 <?php endblock() ?>
 
