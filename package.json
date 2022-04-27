@@ -1,6 +1,6 @@
 {
   "name": "bsecure-payments-js",
-  "version": "1.0.4",
+  "version": "1.0.15",
   "description": "bSecure Payment Plugin is a JavaScript library that allows you to securely process your payments. This plugin instantly creates a form that adheres to PCI, HIPAA, GDPR, or CCPA security requirements.",
   "main": "lib/index.js",
   "keywords": [
