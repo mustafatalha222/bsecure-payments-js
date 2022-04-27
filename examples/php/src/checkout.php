@@ -254,6 +254,10 @@
                 <label>Client ID</label>
                 <input required="true" value="" name="client_id" class="control" placeholder="Please enter client id">
             </div>
+            <div class="group">
+                <label>Client Environment</label>
+                <input required="true" value="" name="client_env" class="control" placeholder="1">
+            </div>
            
         </div>
      <div class="group m20">

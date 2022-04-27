@@ -22,7 +22,7 @@
         '__18ver__' => $_ENV['PLUGIN_VERSION'],
         '__19lan__' => "EN",
         '__20red__' => $_SERVER['SERVER_NAME'],
-        '__21cenv__' => $_GET['client_id'],
+        '__21cenv__' => $_GET['client_env'],
     ];
     // delete bSecurePaymentTransactionParameters.__17seh__ ; <---might be needs to be deleted
     $salt = $_GET['client_id'];

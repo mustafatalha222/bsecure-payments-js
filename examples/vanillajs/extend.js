@@ -16,7 +16,6 @@ function callForPlugin(){
     if(Object.keys(params).length === 0){
         goBackPrompt("Please fill form details")
     }
-    // console.log(params, "<--passed values")
 
     bSecurePaymentPluginResponseHandler.onErrorAlert = function(data) {
         new Notyf({ duration: 5000}).error(data.message[0]);
@@ -63,7 +62,7 @@ function callForPlugin(){
     bSecurePaymentTransactionParameters.__16stid__ = params.store_id;
     bSecurePaymentTransactionParameters.__18ver__ = "1.1";
     bSecurePaymentTransactionParameters.__20red__ = "http://host name";
-    bSecurePaymentTransactionParameters.__21cenv__ = 2;
+    bSecurePaymentTransactionParameters.__21cenv__ = params.client_env;
     
    
     const salt = params.client_id

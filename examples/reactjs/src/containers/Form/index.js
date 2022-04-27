@@ -42,7 +42,6 @@ import {
   
       const handleSubmit = (e) => {
           e.preventDefault()
-          console.log(formData);
           HISTORY.push("/extend", {formData})
       };
   

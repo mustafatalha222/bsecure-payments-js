@@ -5,7 +5,7 @@ import {
     bSecurePayments,
     TransactionParameters,
     bSecurePaymentsHandler,
-} from "s-payments"
+} from "bsecure-payments-js"
 import {HISTORY} from '../../util'
 import './payment.css'
 import { useToasts } from 'react-toast-notifications'
@@ -15,7 +15,7 @@ function Payment(props) {
     const { addToast } = useToasts();
     const {name, country_code,phone, email, country, province, city, area, address,
             order_id, currency, sub_total, total, discount,
-            client_id, merchant_id, store_id} = props.history.location.state?.formData || {}
+            client_id, merchant_id, store_id, client_env} = props.history.location.state?.formData || {}
     useEffect(() => {
         if(!props.history.location.state?.formData){
             HISTORY.replace("/")
@@ -39,23 +39,18 @@ function Payment(props) {
         bSecurePaymentsHandler.initialize();
         bSecurePaymentsHandler.onErrorAlert = function (msg) {
             addToast(msg?.message, { appearance: 'error' });
-            //console.log("onErrorAlert: ", msg)
             return msg;
         }
         bSecurePaymentsHandler.onSuccessAlert = function (msg) {
             addToast(msg?.message, { appearance: 'success' });
-            //console.log("onSuccessAlert: ", msg)
             return msg;
         }
         bSecurePaymentsHandler.onValidationErrorAlert = function (msg) {
             addToast(msg?.message, { appearance: 'error' });
-            //console.log("onValidationErrorAlert: ", msg)
             HISTORY.replace("/")
             return msg;
         }
         bSecurePaymentsHandler.onProcessPaymentSuccess = function (msg) {
-            //console.log("onProcessPaymentSuccess: ", msg)
-            //clear div and replace path name 
             setTimeout(() => {
                 resetFrame()
             }, 6000);
@@ -64,7 +59,6 @@ function Payment(props) {
         }
         bSecurePaymentsHandler.onProcessPaymentFailure = function (msg) {
             addToast(msg?.message, { appearance: 'error' });
-            //console.log("onProcessPaymentFailure: ", msg)
             HISTORY.replace("/")
             return msg;
         }
@@ -91,21 +85,17 @@ function Payment(props) {
         TransactionParameters.__16stid__ = store_id;
         TransactionParameters.__18ver__ = "1.1";
         TransactionParameters.__20red__ = window.location.href;
-        TransactionParameters.__21cenv__ = 2;
+        TransactionParameters.__21cenv__ = client_env;
         const salt = client_id
         let _signature = salt+"&";
         Object.keys(TransactionParameters)
         .sort()
         .forEach(function(v, idx, array) {
             let _val = TransactionParameters[v].toString().replace(/\s/g, '');
-            // //console.log("v: ",v," val: ", _val)
              _signature +=  _val.concat(idx === array.length - 1 ? "" : "&")
         });
-        //console.log("_signature: ", _signature)
         let _hash =  CryptoJS.HmacSHA256(_signature,salt).toString() ; 
-        //console.log("_hash: ", _hash.toUpperCase())
        TransactionParameters.__17seh__ = _hash.toUpperCase();
-       //console.log(TransactionParameters)
         try {
           bSecurePayments.initialize("bSecurePaymentPluginContainer");
         } catch (error) {
