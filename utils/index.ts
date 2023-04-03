@@ -11,7 +11,7 @@ function isEmpty(x) {
         x === false ||
         x.length === 0 ||
         x === ''||
-        (x === "object" && Object.key(x).length === 0) ||
+        (x === "object" && Object.keys(x).length === 0) ||
         (x && Object.keys(x).length === 0
         && Object.getPrototypeOf(x) === Object.prototype)
     );
@@ -48,15 +48,15 @@ function prepareFrame(checkout_url) {
     ifrm.style.left = "0";
     ifrm.style.width = "100%";
     ifrm.style.height = "100%";
-    document.getElementById("bSecurePaymentPluginContainer").appendChild(ifrm);
+    document.getElementById("bSecurePaymentPluginContainer")?.appendChild(ifrm);
 }
 
 
 function resetFrame() {
-    document.getElementById("bSecurePaymentPluginContainer").remove();
+    document.getElementById("bSecurePaymentPluginContainer")?.remove();
 }
 
-module.exports = {
+export = {
     isEmpty: isEmpty,
     isJson: isJson,
     checkEmptyHtml: checkEmptyHtml,

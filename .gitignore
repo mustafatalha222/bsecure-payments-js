@@ -24,3 +24,5 @@ yarn-error.log
 /public/access.log
 .idea/
 .history/
+
+lib

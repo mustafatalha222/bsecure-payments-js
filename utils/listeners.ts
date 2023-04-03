@@ -105,7 +105,7 @@ const errorHandlers = {
     }
 }
 
-module.exports = {
+export = {
     errorHandlers: errorHandlers,
     bSecurePaymentsHandler: bSecurePaymentsHandler,
     bSecurePaymentsEventHandler: bSecurePaymentsEventHandler

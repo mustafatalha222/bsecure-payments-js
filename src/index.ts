@@ -156,7 +156,7 @@ const TransactionParameters = {
     __14cfadd__: "", //   			pp_CustomerFormattedAddress
     __15mid__: "", //               pp_MerchantID
     __16stid__: "", //  			pp_StoreSlug
-    // __17seh__: "",
+    __17seh__: "",
     __18ver__: "", // 				pp_Version
     __19lan__: "EN", //             pp_Language
     __20red__: "", //               pp_RedirectURL

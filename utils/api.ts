@@ -4,7 +4,7 @@
 
 let { errorHandlers } = require("../utils/listeners");
 
-const bSecurePaymentTransactionURL = "https://api.bsecure.pk/v1/payment-plugin/create-order";
+const bSecurePaymentTransactionURL = "https://api-dev.bsecure.app/v1/payment-plugin/create-order";
 
 var _require = require("./"),
     isEmpty = _require.isEmpty,
@@ -62,6 +62,6 @@ function generateOrder(TransactionParameters) {
         }));
 }
 
-module.exports = {
+export = {
     generateOrder: generateOrder,
 };
