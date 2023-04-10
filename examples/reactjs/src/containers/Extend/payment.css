@@ -4,3 +4,41 @@
     height: 100vh;
     align-items: center;
 }
+
+#bSecurePaymentPluginContainer{
+    position: relative;
+    position: relative;
+    border: 1px solid;
+    padding: 5px;
+    max-width: 580px;
+    margin: auto;
+    min-height: 100px;
+}
+
+
+#bSecurePaymentPluginContainer iframe{
+    position: relative !important;
+}
+
+
+.pay-btn{
+    text-align: center !important;
+}
+.pay-btn button{
+    width: 200px;
+    margin-bottom: 30px;
+}
+.pay-btn button:disabled{
+    background-color: #bbb !important;
+    border-color: #bbb ;
+}
+
+.pay-btn button:disabled::after{
+    content: "";
+}
+
+.MuiCircularProgress-root {
+    color: white !important;
+    width: 20px !important;
+    height: 20px !important;
+}

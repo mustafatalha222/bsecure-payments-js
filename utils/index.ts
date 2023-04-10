@@ -2,6 +2,8 @@
 
 'use strict';
 
+import { bSecurePayments } from "../src";
+
 function isEmpty(x) {
     return (
         typeof x === 'undefined' ||
@@ -49,6 +51,12 @@ function prepareFrame(checkout_url) {
     ifrm.style.width = "100%";
     ifrm.style.height = "100%";
     document.getElementById("bSecurePaymentPluginContainer")?.appendChild(ifrm);
+
+    //Trigger event for in-line error validation alerts should be enabled/disabled
+    setTimeout(() => {
+        bSecurePayments.handleAlertsSettings();
+    }, 6000);
+    bSecurePayments.checkoutEnabled();
 }
 
 

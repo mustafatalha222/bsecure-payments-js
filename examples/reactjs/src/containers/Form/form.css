@@ -12,7 +12,7 @@
   text-align: unset;
   font-size: larger;
   font-weight: bold;
-  padding-bottom: 5px;
+  padding-bottom: 9px;
 }
 
 .MuiButton-root{
@@ -21,4 +21,281 @@
 
 .MuiPaper-root{
   z-index: 1000 !important;
+}
+
+/* cart items */
+
+img {
+  max-width: 60%;
+  vertical-align: middle;
+  border-radius: 4px;
+}
+
+button {
+  background-color: #1976d2;
+  border: 2px solid #1976d2;
+  color: #ffffff;
+  transition: all 0.25s linear;
+  cursor: pointer;
+}
+
+button::after {
+  position: relative;
+  right: 0;
+  content: " \276f";
+  transition: all 0.15s linear;
+  font-size: medium;
+}
+
+button:hover {
+  background-color: #16cc9b;;
+  border-color: #16cc9b;;
+}
+
+button:hover::after {
+  right: -5px;
+}
+
+button:focus {
+  outline: none;
+}
+
+ul {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
+
+input {
+  transition: all 0.25s linear;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  margin: 0;
+}
+
+input {
+  outline: none;
+}
+
+.container {
+  width: 90%;
+  margin: 0 auto;
+  overflow: auto;
+}
+
+/* --- PRODUCT LIST --- */
+
+.products > li {
+  padding: 1rem 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.row {
+  position: relative;
+  overflow: auto;
+  width: 100%;
+}
+.thumbnail{
+  width: 30%;
+}
+.col {
+  display: flex;
+}
+.col, .quantity, .remove {
+  float: left;
+}
+
+.col.left {
+  width: 70%;
+}
+
+.col.right {
+  position: absolute;
+  right: 0;
+  top: calc(50% - 30px);
+}
+
+.detail {
+  padding: 0 0.5rem;
+  line-height: 2.2rem;
+  text-align: initial;
+}
+.detail div{
+  line-height: 22px;
+}
+.detail .name {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+.detail .description {
+  font-size: 1rem;
+}
+
+.detail .price {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.quantity, .remove {
+  width: 50%;
+  text-align: center;
+}
+
+.remove svg {
+  width: 35px;
+  height: 35px;
+}
+
+.quantity > input {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  position: relative;
+  left: calc(50% - 30px);
+  background: #fff;
+  border: 2px solid #ddd;
+  color: #7f7f7f;
+  text-align: center;
+  font: 600 1.5rem Helvetica, Arial, sans-serif;
+}
+
+.quantity > input:disabled{
+  background: #ddd;
+  border: 0
+}
+
+.close {
+  fill: #7d7d7d;
+  transition: color 150ms linear,
+    background-color 150ms linear,
+    fill 150ms linear,
+    150ms opacity linear;
+  cursor: pointer;
+}
+
+.summary {
+  font-size: 1.2rem;
+  text-align: right;
+}
+
+.summary ul li {
+  padding: 0.5rem 0;
+}
+
+.summary ul li span {
+  display: inline-block;
+  width: 30%;
+}
+
+.summary ul li.total {
+  font-weight: bold;
+}
+
+.checkout {
+  text-align: right;
+}
+
+.checkout > button {
+  font-size: 1.2rem;
+  padding: 0.3rem 1rem;
+  border-radius: 5px;
+}
+
+.empty-product {
+  text-align: center;
+}
+
+.empty-product > button {
+  font-size: 1.3rem; 
+  padding: 10px 30px; 
+  border-radius: 5px;
+}
+
+.promotion, .summary, .checkout {
+  float: left;
+  width: 100%;
+  margin-top: 1.5rem;
+}
+
+.promotion > label {
+  float: left;
+  width: 30%;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  line-height: 38px;
+}
+
+.promotion, .summary {
+  width: 50%;
+}
+
+.promotion > input {
+  float: left;
+  width: 30%;
+  font-size: 1rem;
+  padding: 0.5rem 0 0.5rem 1.8rem;
+  border: 2px solid #1d1c1b;;
+  border-radius: 2rem;
+}
+.promotion > input:disabled{
+  background: #ddd;
+  border: 0
+}
+
+.promotion > button {
+  float: left;
+  width: 20%;
+  padding: 0.5rem 0;
+  border-radius: 0 2rem 2rem 0;
+}
+
+.promotion:hover > button {
+  border-color: #f58551;
+  background-color: #f58551;
+}
+
+.MuiInputBase-root{
+  height: 50px !important;
+}
+
+.multi-btn{
+  display: flex;
+  width: 50%;
+  margin: auto;
+}
+
+.multi-btn .back{
+  text-align: left;
+  
+ }
+ .backBtn::after {
+  left: 0;
+  content: "";
+}
+ .backBtn::before {
+  position: relative;
+  left: 0;
+  content: " \276e";
+  padding-right: 4px;
+  transition: all 0.15s linear;
+  font-size: medium;
+}
+
+.radio-boxes {
+  text-align: initial;
+  margin-top: 5px;
+  width: 80%;
+  margin: auto;
+}
+.radio-boxes .MuiFormControl-root{
+  flex-direction: row;
+}
+.radio-boxes .text{
+  font-weight: 600;
+  padding-right: 10px;
 }

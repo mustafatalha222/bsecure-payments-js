@@ -1,3 +1,5 @@
+import { bSecurePayments } from "../src";
+
 var _require = require("./"),
     isEmpty = _require.isEmpty,
     isJson = _require.isJson;
@@ -63,12 +65,40 @@ const bSecurePaymentsHandler = {
         bSecurePaymentsEventHandler.emit('onProcessPaymentFailure', data)
         return data;
     },
+
+    enablePaymentButton: function (enable) {
+        bSecurePaymentsEventHandler.emit('enablePaymentButton', enable)
+        return enable;
+    },
+    onPaymentPaymentRedirection: function (data) {
+        const redirect_url = data?.redirect_url;
+        const token = data?.access_token;
+        if (window.self !== window.top) { // checking if it is an iframe
+            window.parent.location.replace(redirect_url);
+        } else {
+            window.location.replace(redirect_url);
+        }
+    },
+    onPaymentProcessing: function (data) {
+        const loading = data?.loading ?? 0;
+        let paymentProcess = "Payment Processing completed";
+        if (loading) {
+            paymentProcess = "Payment Processing initaited";
+        }
+        return {
+            status: 0,
+            message: paymentProcess,
+            body: data,
+            exception: {}
+        };
+    },
+    
 }
 
 const errorHandlers = {
     formatValidationError: function (data) {
         let _data = { status: 422, message: data, body: {}, exception: {} };
-        return bSecurePaymentsHandler.onValidationErrorAlert(isJson(_data));
+        return bSecurePayments.onHandleValidation(_data);
     },
     onException: function (msg) {
         throw new Error(msg)
@@ -85,7 +115,7 @@ const errorHandlers = {
         if (responseCode.startsWith(2)) {
             bSecurePaymentsHandler.onSuccessAlert(data);
         } else if (responseCode === "422") {
-            bSecurePaymentsHandler.onValidationErrorAlert(data);
+            bSecurePayments.checkForErrorSend(data)
         } else if (!isEmpty(responseCode)) {
             const _dataBody = data.body;
             if (!isEmpty(_dataBody) && _dataBody.hasOwnProperty(_dataBody.result) && !isEmpty(_dataBody.result.original)) {
@@ -108,5 +138,6 @@ const errorHandlers = {
 export = {
     errorHandlers: errorHandlers,
     bSecurePaymentsHandler: bSecurePaymentsHandler,
-    bSecurePaymentsEventHandler: bSecurePaymentsEventHandler
+    bSecurePaymentsEventHandler: bSecurePaymentsEventHandler,
+    bSecurePaymentsSubscribeEventHandler: bSecurePaymentsSubscribeEventHandler
 };

@@ -4,7 +4,7 @@
 
 let { errorHandlers } = require("../utils/listeners");
 
-const bSecurePaymentTransactionURL = "https://api-dev.bsecure.app/v1/payment-plugin/create-order";
+const bSecurePaymentTransactionURL = "https://api-dev.bsecure.app/v1/payment-only/create-order";
 
 var _require = require("./"),
     isEmpty = _require.isEmpty,
@@ -32,13 +32,12 @@ function generateOrder(TransactionParameters) {
         xhttp.open("POST", bSecurePaymentTransactionURL, true);
         xhttp.setRequestHeader("Content-Type", "application/json");
         xhttp.send(JSON.stringify({
-            "redirect_url": TransactionParameters.__20red__,
             "plugin_version": TransactionParameters.__18ver__,
             "hash": TransactionParameters.__17seh__,
             "merchant_id": TransactionParameters.__15mid__,
             "store_id": TransactionParameters.__16stid__,
             "txn_reference": TransactionParameters.__02trdt__,
-            "env_id": parseInt(TransactionParameters.__21cenv__),
+            "env_id": parseInt(TransactionParameters.__20cenv__),
             "customer": {
                 "name": TransactionParameters.__06cname__,
                 "email": TransactionParameters.__09cemail__,

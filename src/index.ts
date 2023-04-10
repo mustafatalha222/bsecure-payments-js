@@ -1,4 +1,8 @@
-let { errorHandlers, bSecurePaymentsHandler, bSecurePaymentsEventHandler } = require("../utils/listeners");
+let { errorHandlers, bSecurePaymentsHandler, bSecurePaymentsEventHandler, bSecurePaymentsSubscribeEventHandler } = require("../utils/listeners");
+const bSecurePaymentAppURL = "https://bsecure-payment-plugin.herokuapp.com/";
+
+let bSecurePaymentsTestMode = 0;
+let bSecurePaymentsManageAlertsOnParentWindow = 0;
 
 Object.defineProperty(exports, "__esModule", {
     value: true,
@@ -8,7 +12,8 @@ const _api = require("../utils/api"),
     generateOrder = _api.generateOrder;
 const _require = require("../utils"),
     checkEmptyHtml = _require.checkEmptyHtml,
-    isEmpty = _require.isEmpty;
+    isEmpty = _require.isEmpty,
+    isJson = _require.isJson;
 
 function prepareFrameListener() {
     /*
@@ -104,15 +109,10 @@ function prepareFrameListener() {
             status: false,
             exception: errorHandlers.formatValidationError("pp_Version is required."),
         };
-    } else if (isEmpty(TransactionParameters.__20red__)) {
+    } else if (isEmpty(TransactionParameters.__20cenv__)) {
         return {
             status: false,
-            exception: errorHandlers.formatValidationError("pp_RedirectURL is required."),
-        };
-    } else if (isEmpty(TransactionParameters.__21cenv__)) {
-        return {
-            status: false,
-            exception: errorHandlers.formatValidationError("pp_ClientEnviromentId is required."),
+            exception: errorHandlers.formatValidationError("pp_clientIntegrationType is required."),
         };
     } else if (!navigator.cookieEnabled) {
         return {
@@ -124,11 +124,22 @@ function prepareFrameListener() {
     * RECEIVE MESSAGE FROM CHILD
     */
     window.addEventListener("message", (e) => {
-        if (e.data.source === "embeddableShakehand") {
-            errorHandlers.handleErrors(e.data.data)
+        const data = e.data;
+        const source = data?.source;
+        if (source === "trigger_bsecure_payment_errors") {
+            errorHandlers.handleErrors(data?.data)
         }
-        if (e.data.source === "embeddableShakehandSuccess") {
-            errorHandlers.handlePayments(e.data.data)
+        if (source === "trigger_bsecure_payment_update") {
+            errorHandlers.handlePayments(data?.data)
+        }
+        if (source  === "enable_bsecure_checkout_btn") {
+            bSecurePaymentsHandler.enablePaymentButton(data.enable)
+        }
+        if (source  === "trigger_bsecure_payment_processing") {
+            bSecurePaymentsHandler.onPaymentProcessing(data.data)
+        }
+        if (source  === "process_bsecure_payments") {
+            bSecurePaymentsHandler.onPaymentPaymentRedirection(data.data)
         }
     });
     return {
@@ -159,11 +170,10 @@ const TransactionParameters = {
     __17seh__: "",
     __18ver__: "", // 				pp_Version
     __19lan__: "EN", //             pp_Language
-    __20red__: "", //               pp_RedirectURL
-    __21cenv__: ""//                pp_Environment
+    __20cenv__: ""//                pp_Environment
 }
 
-const bSecurePayments = {
+export const bSecurePayments = {
     initialize: function (objectId) {
         if (typeof objectId === 'string') {
             if (checkEmptyHtml("#bSecurePaymentPluginContainer")) {
@@ -182,6 +192,43 @@ const bSecurePayments = {
             errorHandlers.onException("bSecurePaymentPluginContainer is required");
         }
     },
+    enableDebugMode: function () {
+        bSecurePaymentsTestMode = 1;
+    },
+    manageAlertsByMerchant: function () {
+        bSecurePaymentsManageAlertsOnParentWindow = 1;
+        // bSecurePayments.handleAlertsSettings()
+    },
+    proceedWithCheckout: function () {
+        var win = document.getElementById("bSecurePaymentPluginContainer")!.querySelector("iframe") as HTMLIFrameElement;
+        win.contentWindow?.postMessage({
+            type: "submit_bsecure_checkout",
+        }, bSecurePaymentAppURL)
+    },
+    checkoutEnabled: function () {
+        window.parent.postMessage({
+            type: "bsecure_checkout_window_enabled",
+        })
+    },
+    handleAlertsSettings: function () {
+        const enableInlineAlerts = bSecurePaymentsManageAlertsOnParentWindow == 1 ? 0 : 1;
+
+        var win = document.getElementById("bSecurePaymentPluginContainer")!.querySelector("iframe") as HTMLIFrameElement;
+        win.contentWindow?.postMessage({
+            type: "trigger_bsecure_payment_alerts",
+            enableInlineAlerts
+        }, '*')
+    },
+    onHandleValidation: function (data) {
+        if (bSecurePaymentsManageAlertsOnParentWindow == 1 ) {
+            return bSecurePaymentsSubscribeEventHandler.onValidationErrorAlert(isJson(data));
+        }
+    },
+    checkForErrorSend: function (data) {
+        if (bSecurePaymentsManageAlertsOnParentWindow == 1) {
+            bSecurePaymentsHandler.onValidationErrorAlert(data);
+        }
+    }
 }
 
 
@@ -189,5 +236,5 @@ module.exports = {
     bSecurePayments,
     TransactionParameters,
     bSecurePaymentsHandler: bSecurePaymentsHandler,
-    bSecurePaymentsEventHandler: bSecurePaymentsEventHandler
+    bSecurePaymentsEventHandler: bSecurePaymentsEventHandler,
 };

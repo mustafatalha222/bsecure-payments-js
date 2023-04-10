@@ -1,26 +1,30 @@
 // @flow
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import CryptoJS from 'crypto-js'
 import {
     bSecurePayments,
     TransactionParameters,
     bSecurePaymentsHandler,
-} from "bsecure-payments-js"
+} from "test-payments" //bsecure-payments-js
 import {HISTORY} from '../../util'
 import './payment.css'
 import { useToasts } from 'react-toast-notifications'
+import { CircularProgress } from "@mui/material";
 
 
-function Payment(props) {
+function Extend({formData}) {
     const { addToast } = useToasts();
     const {name, country_code,phone, email, country, province, city, area, address,
             order_id, currency, sub_total, total, discount,
-            client_id, merchant_id, store_id, client_env} = props.history.location.state?.formData || {}
+            client_id, merchant_id, store_id, client_env} = formData || {} //props.history.location.state?.formData || {}
+    const [enableBtn, setenableBtn] = useState(false)
+    const [loading, setloading] = useState(false)
+    
     useEffect(() => {
-        if(!props.history.location.state?.formData){
+        if(!formData){
             HISTORY.replace("/")
         }
-
+        bSecurePaymentsHandler.initialize();
         responseListener();
         try {
             setTransactionParameters();
@@ -36,7 +40,6 @@ function Payment(props) {
     }
 
     const responseListener = () => {
-        bSecurePaymentsHandler.initialize();
         bSecurePaymentsHandler.onErrorAlert = function (msg) {
             addToast(msg?.message, { appearance: 'error' });
             return msg;
@@ -62,6 +65,16 @@ function Payment(props) {
             HISTORY.replace("/")
             return msg;
         }
+
+        bSecurePaymentsHandler.onPaymentProcessing = function (data) {
+            setloading(data.loading)
+        }
+        bSecurePaymentsHandler.enablePaymentButton = function (enable) {
+            setenableBtn(enable)
+        }
+
+        //for custom message call manageAlertsByMerchant
+        // bSecurePayments.manageAlertsByMerchant();
     };
 
     const setTransactionParameters = () => {
@@ -84,8 +97,7 @@ function Payment(props) {
         TransactionParameters.__15mid__ = merchant_id ;
         TransactionParameters.__16stid__ = store_id;
         TransactionParameters.__18ver__ = "1.1";
-        TransactionParameters.__20red__ = window.location.href;
-        TransactionParameters.__21cenv__ = client_env;
+        TransactionParameters.__20cenv__ = client_env;
         const salt = client_id
         let _signature = salt+"&";
         Object.keys(TransactionParameters)
@@ -103,12 +115,21 @@ function Payment(props) {
         }
     };
 
+    const handlePay=()=>{
+        bSecurePayments.proceedWithCheckout();
+    }
+
     return (
-        <>
+        <section  style={{  marginTop: 50, marginBottom:0 }}>
          <div id="bSecurePaymentPluginContainer"></div>
-        </>
+            <div className="pay-btn checkout">
+                <button type="submit" disabled={!enableBtn || loading} onClick={handlePay}>
+                    Pay {` `}{loading &&<CircularProgress />}
+                </button>
+              </div>
+        </section>
     );
 }
 
 
-export default Payment;
+export default Extend;
